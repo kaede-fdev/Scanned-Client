@@ -1,4 +1,4 @@
-import { InforFieldSchema } from "@/components/common/InforBoxDemo/inforbox.types";
+import { InforFieldSchema } from "@/components/core/common/InforBoxDemo/inforbox.types";
 
 const schema: InforFieldSchema = {
     endpoint: "https://opentdb.com/api.php",

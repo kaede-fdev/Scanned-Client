@@ -17,7 +17,7 @@ export default function SignIn() {
         password: "Admin123@",
         rememberMe: true,
       };
-      // await signIn(data);
+      await signIn(data);
       const res: any = await postRequest(
         "https://fudeverwebapi.io.vn/api/Auth/sign-in",
         {
