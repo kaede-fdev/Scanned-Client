@@ -200,7 +200,7 @@ function ScanModule() {
           $fontWeight={700}
           $color={themes.default.colors.primaryDark}
         >
-          Thêm dữ liệu quét mới
+          Thêm dữ liệu mới từ máy quét
         </Typography.Title>
       </S.Head>
       <S.Container>
@@ -238,10 +238,11 @@ function ScanModule() {
                     dataSource={scannedData}
                     loading={isFetching}
                     rowKey={(record) => record._id}
-                    scroll={{y: screens.xxl ? 1000 : 500}}
+                    scroll={{y: screens.xxl ? 1000 : 600}}
                     size="small"
                     bordered={false}
                     pagination={false}
+                    sticky
                     showSorterTooltip={{ target: 'sorter-icon' }}
                 />
               </Form.Item>

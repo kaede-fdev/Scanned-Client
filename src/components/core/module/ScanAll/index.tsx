@@ -1,31 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-    Avatar,
-  Button,
-  Card,
-  Flex,
-  Form,
-  Grid,
-  Input,
-  Popover,
-  Table,
-  TableProps,
-} from "antd";
+import { Button, Flex, Form, Grid, Input, Table, TableProps } from "antd";
+import React, { useCallback } from "react";
 import { IoSearch } from "react-icons/io5";
 
-import * as S from "./scanall.styles";
-import { themes } from "@/styles/themes";
 import Typography from "@/common/Typography";
-import { useAllOnUserQuery } from "@/store/services/scan";
 import { ScanInfor } from "@/helpers/types";
-import moment from "moment";
-import PopoverModule from "./PopoverModules";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next-nprogress-bar";
-import _ from "lodash";
+import { useAllOnUserQuery } from "@/store/services/scan";
+import { themes } from "@/styles/themes";
 import { createQueryString } from "@/utils/queryString";
+import _ from "lodash";
+import moment from "moment";
+import { useRouter } from "next-nprogress-bar";
+import { useSearchParams } from "next/navigation";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import PopoverModule from "./PopoverModules";
+import * as S from "./scanall.styles";
+import { exportDataWithCustomHeadersToExcel } from "@/utils/xlsxExport";
 
 function ScanAllModules() {
   const router = useRouter();
@@ -36,17 +27,21 @@ function ScanAllModules() {
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || "";
 
-
-  const { scannedData, isFetching, refetch } = useAllOnUserQuery({
-    search: search,
-    limit: undefined}, {
-    selectFromResult: ({ data, isFetching }) => {
-      return {
-        scannedData: data?.data?.scanneds ?? [],
-        isFetching,
-      };
+  const { scannedData, isFetching, refetch } = useAllOnUserQuery(
+    {
+      search: search,
+      limit: undefined,
     },
-  });
+    {
+      selectFromResult: ({ data, isFetching }) => {
+        return {
+          scannedData: data?.data?.scanneds ?? [],
+          isFetching,
+        };
+      },
+    }
+  );
+  console.log(scannedData);
 
   const columns: TableProps<ScanInfor>["columns"] = [
     {
@@ -132,7 +127,7 @@ function ScanAllModules() {
       dataIndex: "",
       key: "issuedAt",
       fixed: "left",
-      width: 80,
+      width: 100,
       render: (value, record) => {
         return (
           <Typography.Text>
@@ -147,11 +142,9 @@ function ScanAllModules() {
       dataIndex: "",
       key: "scannedBy",
       fixed: "left",
-      width: 80,
+      width: 120,
       render: (value, record) => {
-        return (
-           <PopoverModule record={record}/>
-        );
+        return <PopoverModule record={record} />;
       },
       sorter: (one, two) => one.issuedAt.localeCompare(two.issuedAt),
     },
@@ -177,6 +170,22 @@ function ScanAllModules() {
     router.push(createQueryString("search", `${e?.target?.value}`));
   }, 300);
 
+  const headersMapping = {
+    fullname: 'Họ và Tên',
+    cccd: 'Căn cước công dân',
+    cmnd: 'Chứng minh nhân dân',
+    gender: 'Giới tính',
+    dob: 'Ngày sinh (MmDdYyyy)',
+    fullAddress: 'Quê quán',
+    issuedAt: 'Ngày cấp (MmDdYyyy)',
+    scannedBy: 'Người quét',
+    position: "Chức vụ"
+  };
+
+  const handleExport = () => {
+    exportDataWithCustomHeadersToExcel(scannedData, headersMapping, 'data-exported.xlsx');
+  };
+
   return (
     <S.MainContainerWrapper>
       <S.Head>
@@ -185,15 +194,15 @@ function ScanAllModules() {
           $fontWeight={700}
           $color={themes.default.colors.primaryDark}
         >
-          Tất cả dữ liệu đã quyét
+          Tất cả dữ liệu đã có
         </Typography.Title>
       </S.Head>
       <Flex>
-        <Form name="headForm" layout="vertical">
+        <Form name="headForm" layout="vertical" >
           <Flex
             justify="space-between"
-            align=""
             style={{ height: "fit-content" }}
+            vertical={screens.xs ? true : false}
           >
             <Form.Item>
               <Input
@@ -204,11 +213,18 @@ function ScanAllModules() {
                   />
                 }
                 placeholder="Nhập dữ liệu để tìm kiếm"
-                style={{ width: 360 }}
+                style={{ width: screens.xs ? "100%" : 360 }}
                 onChange={handleSearch}
               />
             </Form.Item>
-            <Button type="primary">Xuất file Excel</Button>
+            <Button
+              style={{ alignItems: "center", display: "flex" }}
+              icon={<RiFileExcel2Fill size={16} />}
+              type="primary"
+              onClick={() => handleExport()}
+            >
+              Xuất file Excel
+            </Button>
           </Flex>
         </Form>
       </Flex>
@@ -220,7 +236,7 @@ function ScanAllModules() {
               dataSource={scannedData}
               loading={isFetching}
               rowKey={(record) => record._id}
-              scroll={{ y: screens.xxl ? 1000 : 500 }}
+              scroll={{ y: screens.xxl ? 1000 : 600 }}
               size="small"
               bordered={false}
               pagination={false}

@@ -35,7 +35,7 @@ export default function Providers({children}: {children:React.ReactNode}) {
                               Table: {
                                 headerBg: themes.default.colors.primaryDarker,
                                 headerColor: themes.default.colors.text5,
-                                headerBorderRadius: 8,
+                                headerBorderRadius: 4,
                                 stickyScrollBarBg: themes.default.colors.background1,
                                 headerFilterHoverBg: themes.default.colors.primary,
                                 headerSortActiveBg: themes.default.colors.primary,

@@ -11,6 +11,7 @@ import {
   Form,
   FormProps,
   Input,
+  message,
 } from "antd";
 import Typography from "@/components/core/common/Typography";
 import { themes } from "@/styles/themes";
@@ -35,8 +36,11 @@ function SignInModule() {
         password: values.password
       }
       const res: any = await signIn(postData).unwrap();
+      message.success("Đăng nhập thành công")
       router?.push(`scan`);
-    } catch (error) {}
+    } catch (error:any) {
+      message.error(error?.data?.message);
+    }
   };
 
   return (
@@ -79,7 +83,7 @@ function SignInModule() {
                   { required: true, message: "Mật khẩu không được để trống" },
                 ]}
               >
-                <Input
+                <Input.Password
                   placeholder={"Nhập mật khẩu"}
                   autoComplete="current-password"
                 />
@@ -96,7 +100,7 @@ function SignInModule() {
                 </Flex>
               </Col>
               <Form.Item>
-                <Button htmlType="submit" type="primary">Đăng nhập</Button>
+                <Button loading={isLoading} htmlType="submit" type="primary">Đăng nhập</Button>
               </Form.Item>
             </Form>
             <Flex align="flex-start" justify="space-between">

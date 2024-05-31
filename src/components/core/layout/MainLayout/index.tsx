@@ -107,7 +107,7 @@ export default function MainLayout({
           >
             {""}
           </Button> */}
-          <Flex align="center" style={{cursor: "pointer"}} onClick={() => router.push('/scan')}>
+          <Flex align="center" style={{cursor: "pointer"}} onClick={() => setCollapse(!collapse)}>
             <IoScanCircle style={{ color: "white" }} size={38} />
             <Typography.Title level={3} $color="white">Scan</Typography.Title>
           </Flex>

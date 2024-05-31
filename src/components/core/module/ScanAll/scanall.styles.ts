@@ -25,7 +25,7 @@ export const Head = styled.div`
 
 export const Container = styled.div`
     overflow: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
     overflow-x: hidden;
 
 `
