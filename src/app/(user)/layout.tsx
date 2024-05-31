@@ -1,4 +1,5 @@
-import AdminLayout from "@/components/core/layout/AdminLayout";
+import MainLayout from "@/components/core/layout/MainLayout";
+import { constants } from "@/settings";
 import { checkToken } from "@/utils/checkToken";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
@@ -9,13 +10,13 @@ export default async function LayoutAuth({
 }: {
   children: React.ReactNode;
 }) {
-  const token = getCookie("next_token", { cookies });
+  const token = getCookie(constants.ACCESS_TOKEN, { cookies });
 
-  const isAuth = await checkToken(token);
+  console.log(token);
 
-  if (!isAuth) {
-    redirect("sign-in");
+  if (!token) {
+    redirect(`/sign-in`);
   }
 
-  return <AdminLayout>{children}</AdminLayout>;
+  return <MainLayout>{children}</MainLayout>;
 }

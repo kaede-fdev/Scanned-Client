@@ -1,3 +1,4 @@
+import { constants } from "@/settings";
 import { checkToken } from "@/utils/checkToken";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
@@ -8,13 +9,12 @@ export default async function LayoutAuth({
 }: {
   children: React.ReactNode;
 }) {
-  const token = getCookie("next_token", { cookies });
+  const token = getCookie(constants.ACCESS_TOKEN, { cookies });
 
-  const isAuth = await checkToken(token);
+  console.log("Token", token);
 
-  if (isAuth) {
-    redirect("/");
+  if (token) {
+    redirect(`/scan`);
   }
-
   return <div>{children}</div>;
 }

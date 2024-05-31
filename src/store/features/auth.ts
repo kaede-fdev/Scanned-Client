@@ -15,24 +15,20 @@ const slice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    //todo adding reducers
+
   },
   extraReducers: (builder) => {
-    //todo
+
     builder
       .addMatcher(authAPI.endpoints.signIn.matchPending, () => {
-        //todo do storage action when req is pending
+       
       })
       .addMatcher(authAPI.endpoints.signIn.matchFulfilled, (state, action) => {
-        // webStorageClient.set(constants.IS_AUTH, (state.isAuth = true));
-        webStorageClient.setToken(action?.payload?.body?.accessToken);
-        webStorageClient.set(
-          constants.REFRESH_TOKEN,
-          action?.payload?.body?.refreshToken
-        );
+       
+        webStorageClient.setToken(action?.payload?.data?.token);
+
       })
       .addMatcher(authAPI.endpoints.signIn.matchRejected, (state) => {
-        //todo do storage action when req rejected
         webStorageClient.removeAll();
         state.isAuth = false;
       });
