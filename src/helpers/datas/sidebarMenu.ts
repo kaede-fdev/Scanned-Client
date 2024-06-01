@@ -1,12 +1,13 @@
 import { MenuProps } from "antd";
 import { TbGridScan } from "react-icons/tb";
 import React from "react";
+import { FaUsersCog } from "react-icons/fa";
 
 export const sidebarMenu: MenuProps["items"] = [
   {
     key: "scan-tab",
     icon: React.createElement(TbGridScan),
-    label: "Scan",
+    label: "Quét",
     children: [
         {
             key: 'scan',
@@ -18,4 +19,37 @@ export const sidebarMenu: MenuProps["items"] = [
         }
     ]
   },
+  {
+    key: "users",
+    icon: React.createElement(FaUsersCog),
+    label: "Quản lý",
+    children: [
+      {
+          key: 'create-user',
+          label: "Tạo người dùng",
+      },
+      {
+          key: 'user-management',
+          label: "Quản lý người dùng",
+      }
+  ]
+  }
+];
+
+export const sidebarMenuUser: MenuProps["items"] = [
+  {
+    key: "scan-tab",
+    icon: React.createElement(TbGridScan),
+    label: "Quét",
+    children: [
+        {
+            key: 'scan',
+            label: "Quét mới",
+        },
+        {
+            key: 'scan-all',
+            label: "Tất cả dữ liệu",
+        }
+    ]
+  }
 ];

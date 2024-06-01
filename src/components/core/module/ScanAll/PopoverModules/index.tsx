@@ -24,17 +24,17 @@ function PopoverModule({ record }: TProps) {
           <Flex vertical>
             <Flex gap={10} align="center">
               <Avatar
-                src={record.scannedBy.avatar}
+                src={record?.scannedBy?.avatar ?? ""}
                 alt="avatar"
                 size={"large"}
               />
               <Flex vertical>
                 <Typography.Title level={5} $fontWeight={600} $color={themes.default.colors.primary}>
-                  {record.scannedBy.firstname && record.scannedBy.lastname
-                    ? `${record.scannedBy.firstname} ${record.scannedBy.lastname}`
-                    : record.scannedBy.email}
+                  {record?.scannedBy?.firstname && record?.scannedBy?.lastname
+                    ? `${record?.scannedBy?.firstname} ${record?.scannedBy?.lastname}`
+                    : record?.scannedBy?.email}
                 </Typography.Title>
-                <Typography.Text>{record.scannedBy.position ?? "Không có chức vụ"}</Typography.Text>
+                <Typography.Text>{record?.scannedBy?.position ?? "Không có chức vụ"}</Typography.Text>
               </Flex>
             </Flex>
           </Flex>
@@ -42,9 +42,9 @@ function PopoverModule({ record }: TProps) {
       }
     >
       <Typography.Text style={{cursor: "pointer"}}>
-        {record.scannedBy.firstname && record.scannedBy.lastname
-          ? `${record.scannedBy.firstname} ${record.scannedBy.lastname}`
-          : record.scannedBy.email}
+        {record?.scannedBy?.firstname && record?.scannedBy?.lastname
+          ? `${record?.scannedBy?.firstname} ${record?.scannedBy?.lastname}`
+          : record?.scannedBy?.email}
       </Typography.Text>
     </Popover>
   );

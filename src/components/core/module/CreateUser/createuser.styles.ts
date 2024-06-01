@@ -1,5 +1,4 @@
-"use client";
-
+import { Card } from "antd";
 import styled from "styled-components";
 
 export const MainContainerWrapper = styled.section`
@@ -15,7 +14,6 @@ export const MainContainerWrapper = styled.section`
 export const Head = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 16px;
   justify-content: space-between;
 
   @media ${(props) => props.theme.breakpoints.smMax} {
@@ -26,10 +24,12 @@ export const Head = styled.div`
 
 export const Container = styled.div`
     overflow: auto;
+    overflow-y: auto;
     overflow-x: hidden;
 `
-
-export const ContainerWrapper = styled.div`
-    /* overflow: auto;
-    overflow-x: hidden; */
-`
+export const CustomCard = styled(Card)`
+  border-radius: 12px !important;
+  .ant-card-body {
+    padding: 16px !important;
+  }
+`;

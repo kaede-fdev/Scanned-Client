@@ -1,87 +1,125 @@
 "use client";
 
 import {
-  LaptopOutlined,
   MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  NotificationOutlined,
-  UserOutlined,
+  MenuUnfoldOutlined
 } from "@ant-design/icons";
-import { Button, Flex, Grid, Layout, Menu, theme } from "antd";
-import { Content, Header } from "antd/es/layout/layout";
+import {
+  Avatar,
+  Button,
+  Flex,
+  Grid,
+  Layout,
+  Menu,
+  message,
+  Popover
+} from "antd";
+import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 
-import React, { useState } from "react";
-import * as S from "./main.styles";
-
-import { IoScanCircle } from "react-icons/io5";
-import Typography from "@/components/core/common/Typography";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { AppProgressBar, useRouter } from "next-nprogress-bar";
-import { themes } from "@/styles/themes";
-import { sidebarMenu } from "@/helpers/datas/sidebarMenu";
-import { keyBy } from "lodash";
+import Image from "next/image";
 import Link from "next/link";
+import { IoIosLogOut } from "react-icons/io";
+
+import * as S from "./main.styles";
+import DropDownUser from "./DropdownUser";
+
+import Typography from "@/components/core/common/Typography";
+import { sidebarMenu, sidebarMenuUser } from "@/helpers/datas/sidebarMenu";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { constants } from "@/settings";
+import { assignUserInfo } from "@/store/features/auth";
+import { useVerifyMutation } from "@/store/services/auth";
+import { themes } from "@/styles/themes";
+import webStorageClient from "@/utils/webStorageClient";
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const router = useRouter();
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
+  const [verify] = useVerifyMutation();
+  const [isShowDropDown, setIsShowDropDown] = useState<boolean>(false);
 
+  const dispatch = useAppDispatch();
 
-
-  const demoitems2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-    (icon, index) => {
-      const key = String(index + 1);
-      return {
-        key: `sub${key}`,
-        icon: React.createElement(icon),
-        label: `subnav ${key}`,
-        children: new Array(4).fill(null).map((_, j) => {
-          const subKey = index * 4 + j + 1;
-          return {
-            key: subKey,
-            label: `option${subKey}`,
-          };
-        }),
-      };
-    }
-  );
   const [collapse, setCollapse] = useState<boolean>(false);
+  const { userInfo } = useAppSelector((state) => state.auth);
+
+  const handleVerifyToken = useCallback(async () => {
+    try {
+      if (!webStorageClient.get(constants.ACCESS_TOKEN)) {
+        message.error("Bạn không có quyền truy cập trang này");
+        throw new Error("Ban không có quyền truy cập trang này");
+      }
+      const res: any = await verify(undefined).unwrap();
+      setIsAdmin(res?.data?.isAdmin);
+
+      dispatch(
+        assignUserInfo({
+          id: res?.data?._id,
+          email: res?.data?.email,
+          firstname: res?.data?.firstname,
+          lastname: res?.data?.lastname,
+          avatar: res?.data?.avatar,
+        })
+      );
+    } catch (error) {
+      webStorageClient.removeAll();
+      router.push(`/sign-in`);
+    }
+  }, [verify, router]);
+
+  useLayoutEffect(() => {
+    handleVerifyToken();
+  }, [handleVerifyToken]);
 
   const sideBarMenuFormat = sidebarMenu?.map((item: any) => ({
     ...item,
     label: item.label,
     icon: item.icon,
-    children: item.children.map((child:any) => {
+    children: item.children.map((child: any) => {
       return {
         key: child.key,
-        label: <Link href={`/${child.key}`}>{child.label}</Link>
-      }
-    })
+        label: <Link href={`/${child.key}`}>{child.label}</Link>,
+      };
+    }),
   }));
 
-  //implement dashboard here
-  //todo customize in need
+  const sideBarMenuFormatForUser = sidebarMenuUser?.map((item: any) => ({
+    ...item,
+    label: item.label,
+    icon: item.icon,
+    children: item.children.map((child: any) => {
+      return {
+        key: child.key,
+        label: <Link href={`/${child.key}`}>{child.label}</Link>,
+      };
+    }),
+  }));
+
   return (
     <Layout
       style={{
         height: "100vh",
       }}
     >
-       <AppProgressBar
-            height="4px"
-            color={themes.default.colors.primary}
-            options={{ showSpinner: false }}
-            shallowRouting
-          />
+      <AppProgressBar
+        height="4px"
+        color={themes.default.colors.primary}
+        options={{ showSpinner: false }}
+        shallowRouting
+      />
       <S.HeaderCustom>
         <Flex justify="center" align="center">
-          {/* <Button
-            type="text"
+          <Button
+            type="link"
             icon={
               collapse ? (
                 <MenuUnfoldOutlined
@@ -106,11 +144,55 @@ export default function MainLayout({
             }}
           >
             {""}
-          </Button> */}
-          <Flex align="center" style={{cursor: "pointer"}} onClick={() => setCollapse(!collapse)}>
-            <IoScanCircle style={{ color: "white" }} size={38} />
-            <Typography.Title level={3} $color="white">Scan</Typography.Title>
-          </Flex>
+          </Button>
+          {/* <Flex
+            align="center"
+            style={{ cursor: "pointer" }}
+            onClick={() => setCollapse(!collapse)}
+          >
+            <IoScanCircle style={{ color: "white" }} size={32} />
+            <Typography.Title level={3} $color="white">
+              Scan
+            </Typography.Title>
+          </Flex> */}
+        </Flex>
+        <Flex align="center">
+          <Popover
+            trigger={"click"}
+            open={isShowDropDown}
+            onOpenChange={() => setIsShowDropDown(!isShowDropDown)}
+            placement="bottomRight"
+            content={<DropDownUser />}
+          >
+            <Flex style={{ cursor: "pointer" }}>
+              <Avatar
+                size={40}
+                src={
+                  <Image
+                    src={userInfo.avatar ?? ""}
+                    alt="avatar"
+                    width={64}
+                    height={64}
+                  />
+                }
+              />
+            </Flex>
+          </Popover>
+          <Button type="text">
+            {screens.xs ? (
+              <IoIosLogOut color={themes.default.colors.text5} size={24} />
+            ) : (
+              <Typography.Text $color="white" $fontWeight={500}
+                style={{cursor: "pointer"}}
+                onClick={() => {
+                  webStorageClient.removeAll()
+                  router.push('/sign-in')
+                }}
+              >
+                Đăng xuất
+              </Typography.Text>
+            )}
+          </Button>
         </Flex>
       </S.HeaderCustom>
       <Layout>
@@ -119,25 +201,37 @@ export default function MainLayout({
           width={200}
           style={{
             background: "#fff",
+            position: screens.xs ? "absolute" : undefined,
+            height: screens.xs ? "calc(100vh - 54px)" : "",
+            zIndex: screens.xs ? "10": undefined
           }}
-          breakpoint="sm"
+          breakpoint="xl"
           collapsed={collapse}
           collapsedWidth={screens?.sm == true ? 80 : 0}
           onCollapse={() => setCollapse(!collapse)}
         >
           <Menu
             mode="inline"
-            defaultSelectedKeys={['scan']}
-            defaultOpenKeys={['scan-tab']}
+            defaultSelectedKeys={["scan"]}
+            defaultOpenKeys={["scan-tab"]}
             defaultActiveFirst
-            items={sideBarMenuFormat}
+            items={
+              isAdmin && webStorageClient.get(constants.IS_ADMIN)
+                ? sideBarMenuFormat
+                : sideBarMenuFormatForUser
+            }
           />
         </Sider>
         <Layout
           style={{
-            padding: "16px 16px",
+            padding: "10px 10px",
           }}
         >
+          {
+            screens.xs && !collapse ? <S.OverLay onClick={() => {
+              setCollapse(!collapse)
+            }}/> : null
+          }
           <Content
             style={{
               padding: 16,

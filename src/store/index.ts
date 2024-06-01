@@ -8,7 +8,6 @@ export const createStore = (
 ) =>
   configureStore({
     reducer: {
-        //todo state for adding reducer
         [api.reducerPath]: api.reducer,
         auth,
     },

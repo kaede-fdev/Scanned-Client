@@ -11,7 +11,6 @@ export default async function LayoutAuth({
 }) {
   const token = getCookie(constants.ACCESS_TOKEN, { cookies });
 
-  console.log("Token", token);
 
   if (token) {
     redirect(`/scan`);

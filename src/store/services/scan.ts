@@ -1,7 +1,6 @@
 "use client";
 import { authEndpoint, scanEndpoint } from "@/services/endpoint";
 import { api } from "./base";
-import { method } from "lodash";
 
 export const authAPI = api.injectEndpoints({
   endpoints: (build) => ({

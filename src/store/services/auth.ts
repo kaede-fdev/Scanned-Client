@@ -17,9 +17,19 @@ export const authAPI = api.injectEndpoints({
       }),
     }),
 
+    verify: build.mutation({
+      query: (data) => ({
+        url: authEndpoint.VERIFY,
+        body: data,
+        method: "GET",
+        flashError: true,
+      }),
+    })
+
   }),
 });
 
 export const {
   useSignInMutation,
+  useVerifyMutation
 } = authAPI;

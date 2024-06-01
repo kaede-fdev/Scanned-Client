@@ -1,15 +1,13 @@
 "use client"
-import React, { useEffect } from 'react'
-import {Provider} from 'react-redux';
-import {store} from '@/store'
-import { ThemeProvider } from 'styled-components';
-import GlobalStyle from '@/styles/global';
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-import {themes} from "@/styles/themes"
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 import StyledComponentsRegistry from '@/services/base/styledComponentsRegistry';
+import { store } from '@/store';
+import GlobalStyle from '@/styles/global';
+import { themes } from "@/styles/themes";
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { App, ConfigProvider } from 'antd';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
 
 export default function Providers({children}: {children:React.ReactNode}) {
     return (
@@ -37,10 +35,11 @@ export default function Providers({children}: {children:React.ReactNode}) {
                                 headerColor: themes.default.colors.text5,
                                 headerBorderRadius: 4,
                                 stickyScrollBarBg: themes.default.colors.background1,
+                                stickyScrollBarBorderRadius: 10,
                                 headerFilterHoverBg: themes.default.colors.primary,
                                 headerSortActiveBg: themes.default.colors.primary,
                                 headerSortHoverBg: themes.default.colors.primary,
-                                fixedHeaderSortActiveBg: themes.default.colors.primary
+                                fixedHeaderSortActiveBg: themes.default.colors.primary,
                               },
                               InputNumber: {
                                 inputFontSize: 14,

@@ -9,7 +9,7 @@ export const MainContainerWrapper = styled.section`
   width: 100%;
   height: 100%;
 
-  gap: 16px;
+  gap: 12px;
 `;
 
 export const Head = styled.div`

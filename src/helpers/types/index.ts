@@ -19,3 +19,16 @@ export type ScanInfor = {
   createdAt: string;
   updatedAt: string;
 };
+export type UserInfor = {
+  _id: string;
+  email: string;
+  avatar: string;
+  phone: string;
+  firstname: string;
+  lastname: string;
+  isAdmin: boolean;
+  position: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

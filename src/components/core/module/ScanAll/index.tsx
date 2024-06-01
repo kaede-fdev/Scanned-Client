@@ -1,22 +1,24 @@
 "use client";
 
 import { Button, Flex, Form, Grid, Input, Table, TableProps } from "antd";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
+import _ from "lodash";
+import moment from "moment";
+import { useRouter } from "next-nprogress-bar";
+import { useSearchParams } from "next/navigation";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { TbReload } from "react-icons/tb";
 
 import Typography from "@/common/Typography";
 import { ScanInfor } from "@/helpers/types";
 import { useAllOnUserQuery } from "@/store/services/scan";
 import { themes } from "@/styles/themes";
 import { createQueryString } from "@/utils/queryString";
-import _ from "lodash";
-import moment from "moment";
-import { useRouter } from "next-nprogress-bar";
-import { useSearchParams } from "next/navigation";
-import { RiFileExcel2Fill } from "react-icons/ri";
+import { exportDataWithCustomHeadersToExcel } from "@/utils/xlsxExport";
+
 import PopoverModule from "./PopoverModules";
 import * as S from "./scanall.styles";
-import { exportDataWithCustomHeadersToExcel } from "@/utils/xlsxExport";
 
 function ScanAllModules() {
   const router = useRouter();
@@ -41,7 +43,9 @@ function ScanAllModules() {
       },
     }
   );
-  console.log(scannedData);
+  useEffect(() => {
+    refetch();
+  }, [])
 
   const columns: TableProps<ScanInfor>["columns"] = [
     {
@@ -49,7 +53,6 @@ function ScanAllModules() {
       dataIndex: "",
       key: "",
       width: 58,
-      fixed: "left",
       render: (text, _, index) => (
         <Typography.Text>{index + 1}</Typography.Text>
       ),
@@ -59,7 +62,7 @@ function ScanAllModules() {
       dataIndex: "",
       key: "name",
       fixed: "left",
-      width: 160,
+      width: 140,
       render: (value, record) => {
         return <Typography.Text>{record?.fullname}</Typography.Text>;
       },
@@ -69,7 +72,6 @@ function ScanAllModules() {
       title: "CCCD",
       dataIndex: "",
       key: "cccd",
-      fixed: "left",
       width: 120,
       render: (value, record) => {
         return <Typography.Text>{record?.cccd}</Typography.Text>;
@@ -80,7 +82,6 @@ function ScanAllModules() {
       title: "CMND",
       dataIndex: "",
       key: "cmnd",
-      fixed: "left",
       width: 120,
       render: (value, record) => {
         return <Typography.Text>{record?.cmnd}</Typography.Text>;
@@ -91,7 +92,6 @@ function ScanAllModules() {
       title: "Ngày sinh",
       dataIndex: "",
       key: "dob",
-      fixed: "left",
       width: 100,
       render: (value, record) => {
         return (
@@ -106,7 +106,6 @@ function ScanAllModules() {
       title: "Giới tính",
       dataIndex: "",
       key: "gender",
-      fixed: "left",
       width: 100,
       render: (value, record) => {
         return <Typography.Text>{record?.gender}</Typography.Text>;
@@ -116,7 +115,6 @@ function ScanAllModules() {
       title: "Địa chỉ",
       dataIndex: "",
       key: "address",
-      fixed: "left",
       width: 200,
       render: (value, record) => {
         return <Typography.Text>{record?.fullAddress}</Typography.Text>;
@@ -126,7 +124,6 @@ function ScanAllModules() {
       title: "Ngày cấp",
       dataIndex: "",
       key: "issuedAt",
-      fixed: "left",
       width: 100,
       render: (value, record) => {
         return (
@@ -141,7 +138,6 @@ function ScanAllModules() {
       title: "Người quét",
       dataIndex: "",
       key: "scannedBy",
-      fixed: "left",
       width: 120,
       render: (value, record) => {
         return <PopoverModule record={record} />;
@@ -152,7 +148,6 @@ function ScanAllModules() {
       title: "Thời gian quét",
       dataIndex: "",
       key: "createAt",
-      fixed: "left",
       width: 120,
       render: (value, record) => {
         return (
@@ -171,34 +166,38 @@ function ScanAllModules() {
   }, 300);
 
   const headersMapping = {
-    fullname: 'Họ và Tên',
-    cccd: 'Căn cước công dân',
-    cmnd: 'Chứng minh nhân dân',
-    gender: 'Giới tính',
-    dob: 'Ngày sinh (MmDdYyyy)',
-    fullAddress: 'Quê quán',
-    issuedAt: 'Ngày cấp (MmDdYyyy)',
-    scannedBy: 'Người quét',
-    position: "Chức vụ"
+    fullname: "Họ và Tên",
+    cccd: "Căn cước công dân",
+    cmnd: "Chứng minh nhân dân",
+    gender: "Giới tính",
+    dob: "Ngày sinh (MmDdYyyy)",
+    fullAddress: "Quê quán",
+    issuedAt: "Ngày cấp (MmDdYyyy)",
+    scannedBy: "Người quét",
+    position: "Chức vụ",
   };
 
   const handleExport = () => {
-    exportDataWithCustomHeadersToExcel(scannedData, headersMapping, 'data-exported.xlsx');
+    exportDataWithCustomHeadersToExcel(
+      scannedData,
+      headersMapping,
+      "data-exported.xlsx"
+    );
   };
 
   return (
     <S.MainContainerWrapper>
       <S.Head>
         <Typography.Title
-          level={3}
+          level={4}
           $fontWeight={700}
           $color={themes.default.colors.primaryDark}
         >
-          Tất cả dữ liệu đã có
+          Tất cả dữ liệu đã quét
         </Typography.Title>
       </S.Head>
       <Flex>
-        <Form name="headForm" layout="vertical" >
+        <Form name="headForm" layout="vertical">
           <Flex
             justify="space-between"
             style={{ height: "fit-content" }}
@@ -217,14 +216,27 @@ function ScanAllModules() {
                 onChange={handleSearch}
               />
             </Form.Item>
-            <Button
-              style={{ alignItems: "center", display: "flex" }}
-              icon={<RiFileExcel2Fill size={16} />}
-              type="primary"
-              onClick={() => handleExport()}
-            >
-              Xuất file Excel
-            </Button>
+            <Flex gap={20} justify="space-between">
+              <Button
+                style={{ width: "fit-content" }}
+                type="default"
+                title="Refresh"
+                onClick={refetch}
+              >
+                <TbReload
+                  size={18}
+                  style={{ display: "flex", alignItems: "center" }}
+                />
+              </Button>
+              <Button
+                style={{ alignItems: "center", display: "flex" }}
+                icon={<RiFileExcel2Fill size={16} />}
+                type="primary"
+                onClick={() => handleExport()}
+              >
+                Xuất file Excel
+              </Button>
+            </Flex>
           </Flex>
         </Form>
       </Flex>
