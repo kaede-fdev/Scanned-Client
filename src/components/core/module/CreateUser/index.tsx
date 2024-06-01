@@ -242,7 +242,7 @@ function CreateUserModule() {
                   dataSource={recentCreatedUser}
                   loading={isFetching}
                   rowKey={(record) => record._id}
-                  scroll={{ y: screens.xxl ? 1000 : 600 }}
+                  scroll={{ x: screens.xxl ? 1000 : 600 }}
                   size="small"
                   bordered={false}
                   pagination={false}

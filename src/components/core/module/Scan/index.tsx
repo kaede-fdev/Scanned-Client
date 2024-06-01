@@ -1,32 +1,42 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import { TbReload } from "react-icons/tb";
 
-import * as S from "./scan.styles";
-import Typography from "../../common/Typography";
 import { themes } from "@/styles/themes";
 import {
   Button,
   Col,
+  Divider,
   Flex,
   Form,
   Grid,
-  Input,
   message,
   Row,
-  Table,
   TableProps,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import Typography from "../../common/Typography";
+import * as S from "./scan.styles";
 
 import { ScanInfor } from "@/helpers/types";
-import { useAllOnUserQuery, useScanMutation } from "@/store/services/scan";
+import {
+  useAllCheckinQuery,
+  useAllCheckoutQuery,
+  useScanCheckinMutation,
+} from "@/store/services/scan";
+import TableCheckin from "./TableCheckin";
+import TableCheckout from "./TableCheckout";
 
 function ScanModule() {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [isOutSide, setIsOutSide] = useState<boolean>(false);
+  const [isCheckOut, setIsCheckOut] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const [isRefresh, setIsRefresh] = useState<boolean>(false);
 
   const [inputData, setInputData] = useState<string | null>("");
   const searchParams = useSearchParams();
@@ -35,26 +45,7 @@ function ScanModule() {
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
 
-  const { scannedData, isFetching, refetch } = useAllOnUserQuery(
-    {
-      limit: 10,
-      search: search,
-    },
-    {
-      selectFromResult: ({ data, isFetching }) => {
-        return {
-          scannedData: data?.data?.scanneds ?? [],
-          isFetching,
-        };
-      },
-    }
-  );
-  
-  useEffect(() => {
-    refetch();
-  }, [])
-  
-  const [scan, { isLoading }] = useScanMutation();
+  const [scanCheckin, { isLoading }] = useScanCheckinMutation();
 
   const handleOnChangeTextarea = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -67,8 +58,8 @@ function ScanModule() {
   ) => {
     try {
       if (event.key === "Enter") {
-        await scan({ data: inputData! }).unwrap();
-        refetch();
+        await scanCheckin({ data: inputData! }).unwrap();
+        setIsRefresh(!isRefresh);
         message.success("Đã lưu thành công");
         setInputData("");
       }
@@ -76,7 +67,6 @@ function ScanModule() {
       message.error("Xảy ra lỗi trong quá trình lưu dữ liệu");
     }
   };
-
 
   useEffect(() => {
     if (textAreaRef.current) {
@@ -102,105 +92,47 @@ function ScanModule() {
     message.warning("Trỏ chuột đang bên ngoài khu vực nhập dữ liệu");
   };
 
-  const columns: TableProps<ScanInfor>["columns"] = [
-    {
-      title: "STT",
-      dataIndex: "",
-      key: "",
-      width: 58,
-      render: (text, _, index) => (
-        <Typography.Text>{index + 1}</Typography.Text>
-      ),
-    },
-    {
-      title: "Họ tên",
-      dataIndex: "",
-      key: "name",
-      width: 160,
-      fixed: "left",
-      render: (value, record) => {
-        return <Typography.Text>{record?.fullname}</Typography.Text>;
-      },
-    },
-    {
-      title: "CCCD",
-      dataIndex: "",
-      key: "cccd",
-      width: 120,
-      render: (value, record) => {
-        return <Typography.Text>{record?.cccd}</Typography.Text>;
-      },
-    },
-    {
-      title: "CMND",
-      dataIndex: "",
-      key: "cmnd",
-      width: 120,
-      render: (value, record) => {
-        return <Typography.Text>{record?.cmnd}</Typography.Text>;
-      },
-    },
-    {
-      title: "Ngày sinh",
-      dataIndex: "",
-      key: "dob",
-      width: 100,
-      render: (value, record) => {
-        return (
-          <Typography.Text>
-            {moment(record?.dob).toDate().toLocaleDateString()}
-          </Typography.Text>
-        );
-      },
-    },
-    {
-      title: "Giới tính",
-      dataIndex: "",
-      key: "gender",
-      width: 100,
-      render: (value, record) => {
-        return <Typography.Text>{record?.gender}</Typography.Text>;
-      },
-    },
-    {
-      title: "Địa chỉ",
-      dataIndex: "",
-      key: "address",
-      width: 200,
-      render: (value, record) => {
-        return <Typography.Text>{record?.fullAddress}</Typography.Text>;
-      },
-    },
-    {
-      title: "Ngày cấp",
-      dataIndex: "",
-      key: "issuedAt",
-      width: 80,
-      render: (value, record) => {
-        return (
-          <Typography.Text>
-            {moment(record?.issuedAt).toDate().toLocaleDateString()}
-          </Typography.Text>
-        );
-      },
-    },
-  ];
-
+ 
   return (
     <S.MainContainerWrapper>
       <S.Head>
-        <Typography.Title
-          level={4}
-          $fontWeight={700}
-          $color={themes.default.colors.primaryDark}
-        >
-          Thêm dữ liệu mới từ máy quét
-        </Typography.Title>
+        <Flex gap={20} vertical={screens.xs ? true : false}>
+          <Typography.Title
+            level={4}
+            $fontWeight={700}
+            $color={themes.default.colors.primaryDark}
+          >
+            Thêm dữ liệu mới từ máy quét
+          </Typography.Title>
+          <Flex gap={20}>
+            <Button
+              onClick={() => {
+                setIsCheckOut(false);
+                router.push("#checkin")
+              }}
+              type={!isCheckOut ? "primary" : "default"}
+            >
+              CHECK IN
+            </Button>
+            <Button
+              onClick={() => {
+                setIsCheckOut(true);
+                router.push("#checkout")
+
+              }}
+              type={isCheckOut ? "primary" : "default"}
+            >
+              CHECK OUT
+            </Button>
+          </Flex>
+        </Flex>
         <Button
           style={{ width: "fit-content" }}
           type="default"
           title="Refresh"
-          onClick={refetch}
+          onClick={() => {
+            setIsRefresh(!isRefresh);
+          }}
         >
           <TbReload
             size={18}
@@ -233,22 +165,30 @@ function ScanModule() {
           </Form.Item>
         </Form>
       </Flex>
-      <Typography.Text $fontWeight={600}>
-        Dữ liệu được thêm mới gần đây
-      </Typography.Text>
       <S.Container>
-        <Table
-          columns={columns}
-          dataSource={scannedData}
-          loading={isFetching}
-          rowKey={(record) => record._id}
-          scroll={{ y: screens.xxl ? 1000 : 600 }}
-          size="small"
-          bordered={false}
-          pagination={false}
-          sticky
-          showSorterTooltip={{ target: "sorter-icon" }}
-        />
+        <Row gutter={16}>
+          <Col xs={24} xxl={24}>
+            <Typography.Text $fontWeight={600} id="checkin">
+              Dữ liệu{" "}
+              <span style={{ color: themes.default.colors.primaryColor }}>
+                CHECK IN
+              </span>{" "}
+              được thêm mới gần đây
+            </Typography.Text>
+            <TableCheckin isRefresh={isRefresh} />
+          </Col>
+          <Col xs={24} xxl={24} style={{marginTop: "20px"}}>
+            <Typography.Text $fontWeight={600} id="checkout" >
+              Dữ liệu{" "}
+              <span style={{ color: themes.default.colors.primaryColor }}>
+                CHECK OUT
+              </span>{" "}
+              được thêm mới gần đây
+            </Typography.Text>
+
+            <TableCheckout isRefresh={isRefresh} />
+          </Col>
+        </Row>
       </S.Container>
     </S.MainContainerWrapper>
   );

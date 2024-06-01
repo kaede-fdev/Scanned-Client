@@ -41,9 +41,10 @@ export const exportDataWithCustomHeadersToExcel = (
     const mappedItem: { [key: string]: string | undefined } = {};
     for (const key in headersMapping) {
       if (key === "scannedBy") {
-        mappedItem[
-          headersMapping[key]
-        ] = `${item.scannedBy.firstname} ${item.scannedBy.lastname}`;
+        mappedItem[headersMapping[key]] =
+          item.scannedBy.firstname && item.scannedBy.lastname
+            ? `${item.scannedBy.firstname} ${item.scannedBy.lastname}`
+            : "N/A";
       } else if (key === "issuedAt") {
         mappedItem[headersMapping[key]] = `${moment(item.issuedAt)
           .toDate()
@@ -52,8 +53,14 @@ export const exportDataWithCustomHeadersToExcel = (
         mappedItem[headersMapping[key]] = `${moment(item.dob)
           .toDate()
           .toLocaleDateString()}`;
-      } else if (key === 'position') {
-        mappedItem[headersMapping[key]] = item.scannedBy.position ?? 'N/A'; // N/A if position is null
+      } else if (key === "position") {
+        mappedItem[headersMapping[key]] = item.scannedBy.position ?? "N/A"; // N/A if position is null
+      } else if (key === "createdAt") {
+        mappedItem[headersMapping[key]] = `${moment(item?.createdAt)
+          .toDate()
+          .toLocaleDateString()} ${moment(item?.createdAt)
+          .toDate()
+          .toLocaleTimeString()} `;
       } else {
         mappedItem[headersMapping[key]] = item[key as keyof DataItem] as string;
       }

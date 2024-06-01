@@ -16,8 +16,14 @@ const userEnpoint = {
 
 const scanEndpoint = {
     ALL_ON_USER: ``,
-    ALL: `${prefixBase}/scan/all`,
-    SCAN: `${prefixBase}/scan`
+    ALL_CHECKIN: `${prefixBase}/scan/all/checkin`,
+    ALL_CHECKOUT: `${prefixBase}/scan/all/checkout`,
+    SCAN_CHECKIN: `${prefixBase}/scan/checkin`,
+    SCAN_CHECKOUT: `${prefixBase}/scan/checkout`,
+    SCAN_CHECKIN_LONG: `${prefixBase}/scan/checkin-long`,
+    SCAN_CHECKOUT_LONG: `${prefixBase}/scan/checkout-long`,
+    SCAN_DOWNLOAD_CHECKIN: `${prefixBase}/scan/download/checkin`,
+    SCAN_DOWNLOAD_CHECKOUT: `${prefixBase}/scan/download/checkout`
 }
 
 //export endpoint
