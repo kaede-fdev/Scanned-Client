@@ -57,7 +57,7 @@ function CreateUserModule() {
     }
   );
 
-  useEffect(() => {refetch()}, [])
+  useEffect(() => { refetch() }, [])
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {

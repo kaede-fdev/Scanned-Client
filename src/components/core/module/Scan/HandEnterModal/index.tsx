@@ -180,7 +180,7 @@ function HandEnterModal({
                     }}
                   >
                     {allBanData?.map((item: any, index: number) => (
-                      <Select.Option value={item?._id}>
+                      <Select.Option key={index} value={item?._id}>
                         {item?.ban}
                       </Select.Option>
                     ))}
@@ -198,7 +198,7 @@ function HandEnterModal({
                 >
                   <Select placeholder="Chọn cán bộ">
                     {allManagerByBanId?.map((item: any, index: number) => (
-                      <Select.Option value={item?._id}>
+                      <Select.Option key={index} value={item?._id}>
                         {item?.fullname}
                       </Select.Option>
                     ))}
