@@ -16,6 +16,14 @@ export type ScanInfor = {
     lastname: string;
     position: string;
   };
+  banId: {
+    _id: string;
+    ban: string;
+  };
+  managerId: {
+    _id: string;
+    fullname:string;
+  };
   createdAt: string;
   updatedAt: string;
 };

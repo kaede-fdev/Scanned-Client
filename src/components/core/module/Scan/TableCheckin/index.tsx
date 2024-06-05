@@ -45,7 +45,7 @@ function TableCheckin({isRefresh}: TProps) {
       title: "STT",
       dataIndex: "",
       key: "",
-      width: 58,
+      width: 40,
       render: (text, _, index) => (
         <Typography.Text>{index + 1}</Typography.Text>
       ),

@@ -39,7 +39,7 @@ function TableOfCheckoutData({isRefresh, search}:TProps) {
         title: "STT",
         dataIndex: "",
         key: "",
-        width: 58,
+        width: 40,
         render: (text, _, index) => (
           <Typography.Text>{index + 1}</Typography.Text>
         ),
@@ -49,7 +49,7 @@ function TableOfCheckoutData({isRefresh, search}:TProps) {
         dataIndex: "",
         key: "name",
         fixed: "left",
-        width: 140,
+        width: 120,
         render: (value, record) => {
           return <Typography.Text>{record?.fullname}</Typography.Text>;
         },
@@ -122,10 +122,38 @@ function TableOfCheckoutData({isRefresh, search}:TProps) {
         sorter: (one, two) => one.issuedAt.localeCompare(two.issuedAt),
       },
       {
+        title: "Phòng ban",
+        dataIndex: "",
+        key: "banId",
+        width: 100,
+        render: (value, record) => {
+          return (
+            <Typography.Text>
+              {record?.banId?.ban}
+            </Typography.Text>
+          );
+        },
+        sorter: (one, two) => one.banId.ban.localeCompare(two.banId.ban),
+      },
+      {
+        title: "Cán bộ quản lý",
+        dataIndex: "",
+        key: "managerId",
+        width: 100,
+        render: (value, record) => {
+          return (
+            <Typography.Text>
+              {record?.managerId?.fullname}
+            </Typography.Text>
+          );
+        },
+        sorter: (one, two) => one.managerId?.fullname.localeCompare(two.managerId?.fullname),
+      },
+      {
         title: "Người quét",
         dataIndex: "",
         key: "scannedBy",
-        width: 120,
+        width: 90,
         render: (value, record) => {
           return <PopoverModule record={record} />;
         },
@@ -135,7 +163,7 @@ function TableOfCheckoutData({isRefresh, search}:TProps) {
         title: "Thời gian quét",
         dataIndex: "",
         key: "createAt",
-        width: 120,
+        width: 100,
         render: (value, record) => {
           return (
             <Typography.Text>

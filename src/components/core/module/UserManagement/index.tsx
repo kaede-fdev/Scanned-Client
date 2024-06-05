@@ -23,7 +23,11 @@ import { useSearchParams } from "next/navigation";
 import _ from "lodash";
 import { createQueryString } from "@/utils/queryString";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { useDeleteByIdMutation, useEditUserMutation, useGetAllUserQuery } from "@/store/services/user";
+import {
+  useDeleteByIdMutation,
+  useEditUserMutation,
+  useGetAllUserQuery,
+} from "@/store/services/user";
 import { useRouter } from "next-nprogress-bar";
 import { UserInfor } from "@/helpers/types";
 import { FaCheck } from "react-icons/fa";
@@ -36,7 +40,7 @@ function UserManagementModule() {
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || "";
 
-  const [editUser, {isLoading}] = useEditUserMutation();
+  const [editUser, { isLoading }] = useEditUserMutation();
   const [deleteById] = useDeleteByIdMutation();
 
   const handleSearch = _.debounce((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +64,7 @@ function UserManagementModule() {
 
   useEffect(() => {
     refetch();
-  },[])
+  }, []);
 
   const HandleField = (value: any, record: any, type: string) => {
     const newEdit = {
@@ -68,23 +72,23 @@ function UserManagementModule() {
       [type]: value,
     };
     handleEditUser(newEdit);
-};
+  };
   const handleEditUser = async (data: any) => {
     try {
-        const res = await editUser(data);
+      const res = await editUser(data);
     } catch (error) {
-        message.error("Xảy ra lỗi trong quá trình thay đổi thông tin user")
+      message.error("Xảy ra lỗi trong quá trình thay đổi thông tin user");
     }
-  }
+  };
   const handleDeleteById = async (_id: string, fullname: string) => {
     try {
-        const res = await deleteById(_id).unwrap();
-        message.success(`Xóa tài khoản ${fullname} thành công`)
-        await refetch();
+      const res = await deleteById(_id).unwrap();
+      message.success(`Xóa tài khoản ${fullname} thành công`);
+      await refetch();
     } catch (error) {
-        message.error("Xảy ra lỗi trong quá trình xóa tài khoản")
+      message.error("Xảy ra lỗi trong quá trình xóa tài khoản");
     }
-  }
+  };
 
   const columns: TableProps<UserInfor>["columns"] = [
     {
@@ -151,14 +155,16 @@ function UserManagementModule() {
       key: "phone",
       width: 140,
       render: (value, record) => {
-        return  <Space.Compact style={{ width: "100%" }}>
-        <Input
-          defaultValue={value.phone}
-          onChange={(event) => {
-            HandleField(event.target.value, record, "phone");
-          }}
-        />
-      </Space.Compact>
+        return (
+          <Space.Compact style={{ width: "100%" }}>
+            <Input
+              defaultValue={value.phone}
+              onChange={(event) => {
+                HandleField(event.target.value, record, "phone");
+              }}
+            />
+          </Space.Compact>
+        );
       },
       sorter: (one, two) => one?.phone?.localeCompare(two?.phone),
     },
@@ -169,9 +175,12 @@ function UserManagementModule() {
       width: 100,
       render: (value, record) => {
         return (
-          <Select defaultValue={value.isAdmin} onChange={(isAdmin: any) => {
-            HandleField(isAdmin, record, "isAdmin")
-          }}>
+          <Select
+            defaultValue={value.isAdmin}
+            onChange={(isAdmin: any) => {
+              HandleField(isAdmin, record, "isAdmin");
+            }}
+          >
             <Select.Option value={false}>Người dùng</Select.Option>
             <Select.Option value={true}>Admin</Select.Option>
           </Select>
@@ -219,18 +228,29 @@ function UserManagementModule() {
       },
     },
     {
-        title: "",
-        dataIndex: "",
-        key: "",
-        width: 50,
-        render: (value, record) => {
-          return (
-            <Flex align="center" gap={10}>
-                <Button type="primary" danger onClick={() => handleDeleteById(record._id, `${record?.firstname} ${record?.lastname}`)}>Xoá</Button>
-            </Flex>
-          );
-        },
+      title: "",
+      dataIndex: "",
+      key: "",
+      width: 50,
+      render: (value, record) => {
+        return (
+          <Flex align="center" gap={10}>
+            <Button
+              type="primary"
+              danger
+              onClick={() =>
+                handleDeleteById(
+                  record._id,
+                  `${record?.firstname} ${record?.lastname}`
+                )
+              }
+            >
+              Xoá
+            </Button>
+          </Flex>
+        );
       },
+    },
   ];
 
   return (

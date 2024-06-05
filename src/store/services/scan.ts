@@ -88,6 +88,55 @@ export const authAPI = api.injectEndpoints({
       }),
     }),
 
+    scanCheckinFromHandInput: build.mutation({
+      query: (body: any) => ({
+        url: scanEndpoint.SAVE_CHECKIN_FORM_HAND,
+        method: "POST",
+        body: body,
+        flashError: true,
+      }),
+    }),
+    scanCheckoutFromHandInputt: build.mutation({
+      query: (body: any) => ({
+        url: scanEndpoint.SAVE_CHECKOUT_FORM_HAND,
+        method: "POST",
+        body: body,
+        flashError: true,
+      }),
+    }),
+
+    deleteCheckinById: build.mutation({
+      query: (params: string) => ({
+        url: scanEndpoint.DELETE_CHECKIN.replace("{:id}", params),
+        method: "DELETE",
+        flashError: true
+      })
+    }),
+    deleteCheckoutById: build.mutation({
+      query: (params: string) => ({
+        url: scanEndpoint.DELETE_CHECKOUT.replace("{:id}", params),
+        method: "DELETE",
+        flashError: true
+      })
+    }),
+    editCheckin: build.mutation({
+      query: (body: any) => ({
+        url: scanEndpoint.EDIT_CHECIN,
+        body: body,
+        method: "PATCH",
+        flashError: true,
+      }),
+    }),
+    editCheckout: build.mutation({
+      query: (body: any) => ({
+        url: scanEndpoint.EDIT_CHECOUT,
+        body: body,
+        method: "PATCH",
+        flashError: true,
+      }),
+    }),
+    
+
   }),
 });
 
@@ -99,5 +148,11 @@ export const {
   useGetLongeastTimeOfCheckinQuery,
   useGetLongeastTimeOfCheckoutQuery,
   useDownloadCheckinMutation,
-  useDownloadCheckoutMutation
+  useDownloadCheckoutMutation,
+  useScanCheckinFromHandInputMutation,
+  useScanCheckoutFromHandInputtMutation,
+  useDeleteCheckinByIdMutation,
+  useDeleteCheckoutByIdMutation,
+  useEditCheckinMutation,
+  useEditCheckoutMutation
 } = authAPI;

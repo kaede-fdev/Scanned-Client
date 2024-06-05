@@ -10,6 +10,14 @@ export interface ScannedBy {
   lastname: string;
   position: string | null;
 }
+export interface BanInfo {
+  _id: string;
+  ban: string;
+}
+export interface ManagerInfo {
+  _id: string;
+  fullname: string;
+}
 
 export interface DataItem {
   _id: string;
@@ -21,6 +29,8 @@ export interface DataItem {
   dob: string;
   fullAddress: string;
   issuedAt: string;
+  banId: BanInfo;
+  managerId: ManagerInfo;
   scannedBy: ScannedBy;
   createdAt: string;
   updatedAt: string;
@@ -54,13 +64,21 @@ export const exportDataWithCustomHeadersToExcel = (
           .toDate()
           .toLocaleDateString()}`;
       } else if (key === "position") {
-        mappedItem[headersMapping[key]] = item.scannedBy.position ?? "N/A"; // N/A if position is null
+        mappedItem[headersMapping[key]] = item.scannedBy.position ?? "N/A";
       } else if (key === "createdAt") {
         mappedItem[headersMapping[key]] = `${moment(item?.createdAt)
           .toDate()
           .toLocaleDateString()} ${moment(item?.createdAt)
           .toDate()
           .toLocaleTimeString()} `;
+      } else if (key === "banId") {
+        mappedItem[headersMapping[key]] = item?.banId?.ban
+          ? `${item?.banId?.ban}`
+          : "N/A";
+      } else if (key === "managerId") {
+        mappedItem[headersMapping[key]] = item?.managerId?.fullname
+          ? `${item?.managerId?.fullname}`
+          : "N/A";
       } else {
         mappedItem[headersMapping[key]] = item[key as keyof DataItem] as string;
       }

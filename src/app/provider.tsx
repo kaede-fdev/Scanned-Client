@@ -45,6 +45,10 @@ export default function Providers({children}: {children:React.ReactNode}) {
                                 inputFontSize: 14,
                                 controlHeight: 40
                               },
+                              DatePicker: {
+                                inputFontSize: 14,
+                                controlHeight: 40
+                              },
                               Select: {
                                 controlHeight: 40
                               }

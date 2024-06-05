@@ -1,6 +1,6 @@
 "use client";
 import moment from "moment";
-import { useRouter, useSearchParams } from "next/navigation";
+import {useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { TbReload } from "react-icons/tb";
 
@@ -25,9 +25,13 @@ import {
   useAllCheckinQuery,
   useAllCheckoutQuery,
   useScanCheckinMutation,
+  useScanCheckoutMutation,
 } from "@/store/services/scan";
 import TableCheckin from "./TableCheckin";
 import TableCheckout from "./TableCheckout";
+import useModal from "@/hooks/useModal";
+import HandEnterModal from "./HandEnterModal";
+import { useRouter } from "next-nprogress-bar";
 
 function ScanModule() {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -46,6 +50,7 @@ function ScanModule() {
   const screens = useBreakpoint();
 
   const [scanCheckin, { isLoading }] = useScanCheckinMutation();
+  const [scanCheckout] = useScanCheckoutMutation();
 
   const handleOnChangeTextarea = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -58,6 +63,13 @@ function ScanModule() {
   ) => {
     try {
       if (event.key === "Enter") {
+        if (isCheckOut) {
+          await scanCheckout({ data: inputData! }).unwrap();
+          setIsRefresh(!isRefresh);
+          message.success("Đã lưu thành công");
+          setInputData("");
+          return;
+        }
         await scanCheckin({ data: inputData! }).unwrap();
         setIsRefresh(!isRefresh);
         message.success("Đã lưu thành công");
@@ -92,7 +104,8 @@ function ScanModule() {
     message.warning("Trỏ chuột đang bên ngoài khu vực nhập dữ liệu");
   };
 
- 
+  const { visible, closeModal, modalState, openModal } = useModal();
+
   return (
     <S.MainContainerWrapper>
       <S.Head>
@@ -108,7 +121,7 @@ function ScanModule() {
             <Button
               onClick={() => {
                 setIsCheckOut(false);
-                router.push("#checkin")
+                router.push("#checkin");
               }}
               type={!isCheckOut ? "primary" : "default"}
             >
@@ -117,8 +130,7 @@ function ScanModule() {
             <Button
               onClick={() => {
                 setIsCheckOut(true);
-                router.push("#checkout")
-
+                router.push("#checkout");
               }}
               type={isCheckOut ? "primary" : "default"}
             >
@@ -126,19 +138,41 @@ function ScanModule() {
             </Button>
           </Flex>
         </Flex>
-        <Button
-          style={{ width: "fit-content" }}
-          type="default"
-          title="Refresh"
-          onClick={() => {
-            setIsRefresh(!isRefresh);
-          }}
-        >
-          <TbReload
-            size={18}
-            style={{ display: "flex", alignItems: "center" }}
-          />
-        </Button>
+        <Flex gap={16}>
+          <Button
+            style={{ width: "fit-content" }}
+            type="primary"
+            title="Nhập tay"
+            onClick={() => {
+              openModal();
+            }}
+          >
+            Nhập tay
+          </Button>
+          <Button
+            style={{ width: "fit-content" }}
+            type="primary"
+            title="Nhập tay"
+            onClick={() => {
+              router.push('/change-infor')
+            }}
+          >
+            Chỉnh sửa thông tin
+           </Button>
+          <Button
+            style={{ width: "fit-content" }}
+            type="default"
+            title="Refresh"
+            onClick={() => {
+              setIsRefresh(!isRefresh);
+            }}
+          >
+            <TbReload
+              size={18}
+              style={{ display: "flex", alignItems: "center" }}
+            />
+          </Button>
+        </Flex>
       </S.Head>
       <Flex vertical>
         <Form name="inputForm" layout="vertical">
@@ -177,8 +211,8 @@ function ScanModule() {
             </Typography.Text>
             <TableCheckin isRefresh={isRefresh} />
           </Col>
-          <Col xs={24} xxl={24} style={{marginTop: "20px"}}>
-            <Typography.Text $fontWeight={600} id="checkout" >
+          <Col xs={24} xxl={24} style={{ marginTop: "20px" }}>
+            <Typography.Text $fontWeight={600} id="checkout">
               Dữ liệu{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
                 CHECK OUT
@@ -190,6 +224,14 @@ function ScanModule() {
           </Col>
         </Row>
       </S.Container>
+      <HandEnterModal
+        visible={visible}
+        closeModal={closeModal}
+        modalState={modalState}
+        isCheckOut={isCheckOut}
+        setIsRefresh={setIsRefresh}
+        isRefresh={isRefresh}
+      />
     </S.MainContainerWrapper>
   );
 }
