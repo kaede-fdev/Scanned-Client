@@ -44,7 +44,6 @@ function TableOfCheckoutForEdit({ isRefresh, search, setIsRefresh }: TProps) {
   const [banId, setBanId] = useState<string>("");
 
   const [recored, setRecored] = useState<ScanInfor | null>(null);
-  console.log(recored);
 
   const { scannedData, isFetching, refetch } = useAllCheckoutQuery(
     {

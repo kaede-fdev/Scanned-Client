@@ -5,9 +5,8 @@ import Typography from "../../common/Typography";
 import { themes } from "@/styles/themes";
 import { Button, Col, Flex, Form, Grid, Input, Row } from "antd";
 import { IoSearch } from "react-icons/io5";
-import { useRouter } from "next-nprogress-bar";
 import TableOfCheckinForEdit from "./TableOfCheckin";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createQueryString } from "@/utils/queryString";
 import _ from "lodash";
 import TableOfCheckoutForEdit from "./TableOfCheckout";
@@ -100,7 +99,7 @@ function ChangeInforModules() {
             />
           </Col>
           <Col span={24}>
-            <Typography.Text $fontWeight={600} id="checkin">
+            <Typography.Text $fontWeight={600} id="checkout">
               Dữ liệu{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
                 CHECK OUT

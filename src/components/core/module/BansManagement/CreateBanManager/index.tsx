@@ -67,7 +67,6 @@ function CreateBanManager() {
       }).unwrap();
       form.resetFields();
       await refetch();
-      console.log(values);
       message.success("Tạo phòng ban thành công");
     } catch (error) {
       message.error("Tạo mới không thành công");
