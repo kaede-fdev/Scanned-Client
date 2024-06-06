@@ -1,6 +1,6 @@
 "use client";
 import moment from "moment";
-import {useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { TbReload } from "react-icons/tb";
 
@@ -32,11 +32,14 @@ import TableCheckout from "./TableCheckout";
 import useModal from "@/hooks/useModal";
 import HandEnterModal from "./HandEnterModal";
 import { useRouter } from "next-nprogress-bar";
+import NewScanModal from "./NewScanModal";
 
 function ScanModule() {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [isOutSide, setIsOutSide] = useState<boolean>(false);
   const [isCheckOut, setIsCheckOut] = useState<boolean>(false);
+
+  const [openModalNewScan, setOpenModalNewScan] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -70,10 +73,11 @@ function ScanModule() {
           setInputData("");
           return;
         }
-        await scanCheckin({ data: inputData! }).unwrap();
-        setIsRefresh(!isRefresh);
-        message.success("Đã lưu thành công");
-        setInputData("");
+        setOpenModalNewScan(true);
+        // await scanCheckin({ data: inputData! }).unwrap();
+        // setIsRefresh(!isRefresh);
+        // message.success("Đã lưu thành công");
+        // setInputData("");
       }
     } catch (error) {
       message.error("Xảy ra lỗi trong quá trình lưu dữ liệu");
@@ -154,11 +158,11 @@ function ScanModule() {
             type="primary"
             title="Nhập tay"
             onClick={() => {
-              router.push('/change-infor')
+              router.push("/change-infor");
             }}
           >
             Chỉnh sửa thông tin
-           </Button>
+          </Button>
           <Button
             style={{ width: "fit-content" }}
             type="default"
@@ -231,6 +235,14 @@ function ScanModule() {
         isCheckOut={isCheckOut}
         setIsRefresh={setIsRefresh}
         isRefresh={isRefresh}
+      />
+      <NewScanModal
+        open={openModalNewScan}
+        setOpen={setOpenModalNewScan}
+        inputData={inputData ?? ""}
+        setInputData={setInputData}
+        isRefresh={isRefresh}
+        setIsRefresh={setIsRefresh}
       />
     </S.MainContainerWrapper>
   );
