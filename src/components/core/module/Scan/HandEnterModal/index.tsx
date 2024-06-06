@@ -88,6 +88,8 @@ function HandEnterModal({
     }
   };
 
+  const [form] = Form.useForm();
+
   return (
     <Modal
       title="Điền thông tin"
@@ -98,7 +100,7 @@ function HandEnterModal({
       centered
       footer={null}
     >
-      <Form layout="vertical" onFinish={onFinish}>
+      <Form layout="vertical" onFinish={onFinish} form={form}>
         <Flex vertical gap={10}>
           <Button style={{ width: "fit-content" }} type="primary">
             {isCheckOut ? "CHECKOUT" : "CHECKIN"}
@@ -177,6 +179,7 @@ function HandEnterModal({
                     placeholder="Chọn phòng ban"
                     onChange={(id: string) => {
                       setBanId(id);
+                      form.resetFields(["managerId"]);
                     }}
                   >
                     {allBanData?.map((item: any, index: number) => (
@@ -196,7 +199,10 @@ function HandEnterModal({
                     },
                   ]}
                 >
-                  <Select placeholder="Chọn cán bộ">
+                  <Select
+                    placeholder="Chọn cán bộ"
+                    disabled={banId.length == 0 ? true : false}
+                  >
                     {allManagerByBanId?.map((item: any, index: number) => (
                       <Select.Option key={index} value={item?._id}>
                         {item?.fullname}

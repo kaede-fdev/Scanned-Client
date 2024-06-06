@@ -379,6 +379,7 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
             <Form.Item name="banId" label="Phòng ban">
               <Select  placeholder="Chọn phòng ban" onChange={(id:string) => {
                 setBanId(id)
+                form.resetFields(['managerId'])
               }}>
                 {allBanData?.map((item: any, index: number) => (
                   <Select.Option key={index} value={item?._id}>{item?.ban}</Select.Option>
@@ -386,7 +387,9 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
               </Select>
             </Form.Item>
             <Form.Item name={"managerId"} label="Cán bộ quản lý">
-              <Select placeholder="Chọn cán bộ quản lý ">
+              <Select placeholder="Chọn cán bộ quản lý "
+                disabled = {banId.length == 0 ? true : false}
+              >
                 {allManagerByBanId?.map((item: any, index: number) => (
                   <Select.Option key={index} value={item?._id}>{item?.fullname}</Select.Option>
                 ))}
