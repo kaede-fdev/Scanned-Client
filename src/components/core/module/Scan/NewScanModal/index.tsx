@@ -67,6 +67,7 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
       onCancel={() => {
         setOpen(false);
         form.resetFields();
+        setInputData("")
       }}
       centered
       footer={null}
