@@ -3,7 +3,7 @@ import Typography from "@/components/core/common/Typography";
 import { useAllBanQuery } from "@/store/services/ban";
 import { useAllBanManagerByBanIdQuery } from "@/store/services/manager";
 import { useScanCheckinMutation } from "@/store/services/scan";
-import { Button, Card, Flex, Form, FormProps, message, Modal, Select } from "antd";
+import { Button, Card, Flex, Form, FormProps, Input, message, Modal, Select } from "antd";
 import React, { useState } from "react";
 
 type TProps = {
@@ -16,7 +16,7 @@ type TProps = {
 };
 type FieldType = {
     banId: string;
-    managerId: string;
+    managerName: string;
   };
 
 function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIsRefresh }: TProps) {
@@ -48,7 +48,7 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
         const saveData = {
             data: inputData!,
             banId: values.banId,
-            managerId: values.managerId
+            managerName: values.managerName
         }
         const res = await scanCheckin(saveData).unwrap();
         setOpen(false);
@@ -111,7 +111,7 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
           </Form.Item>
           <Form.Item
             label="Cán bộ phụ trách"
-            name="managerId"
+            name="managerName"
             rules={[
               {
                 required: true,
@@ -119,7 +119,7 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
               },
             ]}
           >
-            <Select
+            {/* <Select
               placeholder="Chọn cán bộ"
               disabled={banId.length == 0 ? true : false}
             >
@@ -128,7 +128,8 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
                   {item?.fullname}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
+            <Input placeholder="Nhập tên của cán bộ phụ trách"/>
           </Form.Item>
           <Flex justify="end">
             <Form.Item style={{ marginBottom: 0 }}>

@@ -32,9 +32,9 @@ type TProps = {
   setIsRefresh: (bool: boolean) => void;
 };
 type FieldType = {
-    banId: string;
-    managerId: string
-}
+  banId: string;
+  managerId: string;
+};
 function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
@@ -46,6 +46,7 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
     {
       search: search,
       limit: undefined,
+      isCheckout: undefined
     },
     {
       selectFromResult: ({ data, isFetching }) => {
@@ -264,11 +265,24 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
       title: "Phòng ban",
       dataIndex: "",
       key: "ban",
-      width: 100,
+      width: 130,
       render: (value, record) => {
         return (
           <Space.Compact style={{ width: "100%" }}>
-            <Typography.Text>{record?.banId?.ban}</Typography.Text>
+              <Select
+                placeholder="Chọn phòng ban"
+                onChange={(id: string) => {
+                  HandleField(id, record, "banId")
+                }}
+                defaultValue={value?.banId?._id}
+                style={{width: "100%"}}
+              >
+                {allBanData?.map((item: any, index: number) => (
+                  <Select.Option key={index} value={item?._id}>
+                    {item?.ban}
+                  </Select.Option>
+                ))}
+              </Select>
           </Space.Compact>
         );
       },
@@ -282,27 +296,32 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
       render: (value, record) => {
         return (
           <Space.Compact style={{ width: "100%" }}>
-            <Typography.Text>{record?.managerId?.fullname}</Typography.Text>
+            <Input
+              defaultValue={value?.managerName}
+              onChange={(event) => {
+                HandleField(event.target.value, record, "managerName");
+              }}
+            />
           </Space.Compact>
         );
       },
       sorter: (one, two) => one.issuedAt.localeCompare(two.issuedAt),
     },
-    {
-      title: "",
-      dataIndex: "",
-      key: "banId",
-      width: 120,
-      render: (value, record) => {
-        return (
-          <Space.Compact style={{ width: "100%" }}>
-            <Button type="primary" onClick={() => handleOpenModal(record)}>
-              Chọn phòng ban
-            </Button>
-          </Space.Compact>
-        );
-      },
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "",
+    //   key: "banId",
+    //   width: 120,
+    //   render: (value, record) => {
+    //     return (
+    //       <Space.Compact style={{ width: "100%" }}>
+    //         <Button type="primary" onClick={() => handleOpenModal(record)}>
+    //           Chọn phòng ban
+    //         </Button>
+    //       </Space.Compact>
+    //     );
+    //   },
+    // },
     {
       title: "",
       dataIndex: "",
@@ -323,23 +342,23 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
       },
     },
   ];
-  const onFinish:FormProps<FieldType>["onFinish"] = async (values) => {
-    const {banId, managerId} = values;
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    const { banId, managerId } = values;
     const updateData = {
-        ...recored,
-        banId: banId,
-        managerId: managerId
-    }
+      ...recored,
+      banId: banId,
+      managerId: managerId,
+    };
     try {
-        const res = await editCheckin(updateData).unwrap();
-        form.resetFields();
-        closeModal();
-        await refetch();
-        message.success("Lưu thành công");
+      const res = await editCheckin(updateData).unwrap();
+      form.resetFields();
+      closeModal();
+      await refetch();
+      message.success("Lưu thành công");
     } catch (error) {
-        message.error("Thực hiện không thành công")
+      message.error("Thực hiện không thành công");
     }
-  }
+  };
 
   return (
     <>
@@ -377,28 +396,38 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
           </Flex>
           <Flex gap={20} align="center" justify="center">
             <Form.Item name="banId" label="Phòng ban">
-              <Select  placeholder="Chọn phòng ban" onChange={(id:string) => {
-                setBanId(id)
-                form.resetFields(['managerId'])
-              }}>
+              <Select
+                placeholder="Chọn phòng ban"
+                onChange={(id: string) => {
+                  setBanId(id);
+                  form.resetFields(["managerId"]);
+                }}
+              >
                 {allBanData?.map((item: any, index: number) => (
-                  <Select.Option key={index} value={item?._id}>{item?.ban}</Select.Option>
+                  <Select.Option key={index} value={item?._id}>
+                    {item?.ban}
+                  </Select.Option>
                 ))}
               </Select>
             </Form.Item>
             <Form.Item name={"managerId"} label="Cán bộ quản lý">
-              <Select placeholder="Chọn cán bộ quản lý "
-                disabled = {banId.length == 0 ? true : false}
+              <Select
+                placeholder="Chọn cán bộ quản lý "
+                disabled={banId.length == 0 ? true : false}
               >
                 {allManagerByBanId?.map((item: any, index: number) => (
-                  <Select.Option key={index} value={item?._id}>{item?.fullname}</Select.Option>
+                  <Select.Option key={index} value={item?._id}>
+                    {item?.fullname}
+                  </Select.Option>
                 ))}
               </Select>
             </Form.Item>
           </Flex>
-          <Flex style={{width: "100$"}} justify="end">
+          <Flex style={{ width: "100$" }} justify="end">
             <Form.Item>
-              <Button htmlType="submit" type="primary">Lưu</Button>
+              <Button htmlType="submit" type="primary">
+                Lưu
+              </Button>
             </Form.Item>
           </Flex>
         </Form>

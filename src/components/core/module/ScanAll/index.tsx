@@ -68,7 +68,7 @@ function ScanAllModules() {
                   onChange={handleSearch}
                 />
               </Form.Item>
-              <Flex gap={20}>
+              {/* <Flex gap={20}>
                 <Button
                   onClick={() => {
                     setIsCheckOut(false);
@@ -87,7 +87,7 @@ function ScanAllModules() {
                 >
                   CHECK OUT
                 </Button>
-              </Flex>
+              </Flex> */}
             </Flex>
             <Flex gap={20} justify="space-between">
               <Button
@@ -117,14 +117,14 @@ function ScanAllModules() {
         <Row gutter={16}>
           <Col xs={24} xxl={24}>
             <Typography.Text $fontWeight={600} id="checkin">
-              Dữ liệu{" "}
+              Dữ liệu đã{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
                 CHECK IN
               </span>{" "}
             </Typography.Text>
             <TableOfCheckinData isRefresh={isRefresh} search={search} />
           </Col>
-          <Col xs={24} xxl={24} style={{ marginTop: "20px" }}>
+          {/* <Col xs={24} xxl={24} style={{ marginTop: "20px" }}>
             <Typography.Text $fontWeight={600} id="checkout">
               Dữ liệu{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
@@ -133,7 +133,7 @@ function ScanAllModules() {
             </Typography.Text>
 
             <TableOfCheckoutData isRefresh={isRefresh} search={search} />
-          </Col>
+          </Col> */}
         </Row>
       </S.Container>
 

@@ -131,7 +131,7 @@ function ScanModule() {
             >
               CHECK IN
             </Button>
-            <Button
+            {/* <Button
               onClick={() => {
                 setIsCheckOut(true);
                 router.push("#checkout");
@@ -139,7 +139,7 @@ function ScanModule() {
               type={isCheckOut ? "primary" : "default"}
             >
               CHECK OUT
-            </Button>
+            </Button> */}
           </Flex>
         </Flex>
         <Flex gap={16}>
@@ -211,11 +211,11 @@ function ScanModule() {
               <span style={{ color: themes.default.colors.primaryColor }}>
                 CHECK IN
               </span>{" "}
-              được thêm mới gần đây
+              được thêm mới
             </Typography.Text>
             <TableCheckin isRefresh={isRefresh} />
           </Col>
-          <Col xs={24} xxl={24} style={{ marginTop: "20px" }}>
+          {/* <Col xs={24} xxl={24} style={{ marginTop: "20px" }}>
             <Typography.Text $fontWeight={600} id="checkout">
               Dữ liệu{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
@@ -225,7 +225,7 @@ function ScanModule() {
             </Typography.Text>
 
             <TableCheckout isRefresh={isRefresh} />
-          </Col>
+          </Col> */}
         </Row>
       </S.Container>
       <HandEnterModal

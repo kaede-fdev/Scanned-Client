@@ -24,6 +24,9 @@ export type ScanInfor = {
     _id: string;
     fullname:string;
   };
+  managerName: string;
+  isCheckout: boolean;
+  checkoutAt: string;
   createdAt: string;
   updatedAt: string;
 };

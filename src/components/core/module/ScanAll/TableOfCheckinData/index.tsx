@@ -5,6 +5,7 @@ import moment from "moment";
 import React, { useEffect } from "react";
 import PopoverModule from "../PopoverModules";
 import { useAllCheckinQuery } from "@/store/services/scan";
+import { themes } from "@/styles/themes";
 
 type TProps = {
   isRefresh: boolean;
@@ -19,6 +20,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
     {
       search: search,
       limit: undefined,
+      isCheckout: undefined,
     },
     {
       selectFromResult: ({ data, isFetching }) => {
@@ -50,7 +52,8 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       fixed: "left",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text>{record?.fullname}</Typography.Text>;
+        return <Typography.Text $color={themes?.default?.colors?.primary}
+        $fontWeight={500}>{record?.fullname}</Typography.Text>;
       },
       sorter: (one, two) => one.fullname.localeCompare(two.fullname),
     },
@@ -60,7 +63,8 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       key: "cccd",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text>{record?.cccd}</Typography.Text>;
+        return <Typography.Text
+        $fontWeight={500}>{record?.cccd}</Typography.Text>;
       },
       sorter: (one, two) => parseInt(one.cccd) - parseInt(two.cccd),
     },
@@ -70,7 +74,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       key: "cmnd",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text>{record?.cmnd}</Typography.Text>;
+        return <Typography.Text $fontWeight={500} >{record?.cmnd}</Typography.Text>;
       },
       sorter: (one, two) => parseInt(one.cmnd) - parseInt(two.cmnd),
     },
@@ -126,27 +130,44 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       key: "banId",
       width: 100,
       render: (value, record) => {
-        return (
-          <Typography.Text>
-            {record?.banId?.ban}
-          </Typography.Text>
-        );
+        return <Typography.Text>{record?.banId?.ban}</Typography.Text>;
       },
       sorter: (one, two) => one.banId.ban.localeCompare(two.banId.ban),
     },
     {
       title: "Cán bộ quản lý",
       dataIndex: "",
-      key: "managerId",
+      key: "managerName",
+      width: 100,
+      render: (value, record) => {
+        return <Typography.Text>{record?.managerName}</Typography.Text>;
+      },
+      sorter: (one, two) =>
+        one.managerId?.fullname.localeCompare(two.managerId?.fullname),
+    },
+    {
+      title: "CHECKOUT",
+      dataIndex: "",
+      key: "isCheckout",
       width: 100,
       render: (value, record) => {
         return (
           <Typography.Text>
-            {record?.managerId?.fullname}
+            {record?.isCheckout ? (
+              <Typography.Text
+                $color={themes?.default?.colors?.primary}
+                $fontWeight={500}
+              >
+                XONG
+              </Typography.Text>
+            ) : (
+              <Typography.Text $fontWeight={500}>CHƯA</Typography.Text>
+            )}
           </Typography.Text>
         );
       },
-      sorter: (one, two) => one.managerId?.fullname.localeCompare(two.managerId?.fullname),
+      sorter: (one, two) =>
+        one.managerId?.fullname.localeCompare(two.managerId?.fullname),
     },
     {
       title: "Người quét",

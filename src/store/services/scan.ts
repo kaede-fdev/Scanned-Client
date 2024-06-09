@@ -9,6 +9,7 @@ export const authAPI = api.injectEndpoints({
       {
         search: string;
         limit: number | undefined;
+        isCheckout: boolean | undefined;
       }
     >({
       query: (params) => ({

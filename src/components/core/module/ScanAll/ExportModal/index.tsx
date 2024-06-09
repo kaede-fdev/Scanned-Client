@@ -55,10 +55,12 @@ const headersMapping = {
     fullAddress: "Quê quán",
     issuedAt: "Ngày cấp (MmDdYyyy)",
     banId: "Phòng ban",
-    managerId: "Cán bộ quản lý",
+    managerName: "Cán bộ quản lý",
     scannedBy: "Người quét",
     position: "Chức vụ",
-    createdAt: "Thời gian quét"
+    createdAt: "Thời gian quét",
+    isCheckout: "Check out",
+    checkoutAt: "Thời gian Checkout",
 };
 
 const handleOk = async () => {

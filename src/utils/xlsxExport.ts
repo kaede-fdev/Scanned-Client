@@ -31,6 +31,9 @@ export interface DataItem {
   issuedAt: string;
   banId: BanInfo;
   managerId: ManagerInfo;
+  managerName: string;
+  isCheckout: boolean;
+  checkoutAt: string;
   scannedBy: ScannedBy;
   createdAt: string;
   updatedAt: string;
@@ -75,9 +78,21 @@ export const exportDataWithCustomHeadersToExcel = (
         mappedItem[headersMapping[key]] = item?.banId?.ban
           ? `${item?.banId?.ban}`
           : "N/A";
-      } else if (key === "managerId") {
-        mappedItem[headersMapping[key]] = item?.managerId?.fullname
-          ? `${item?.managerId?.fullname}`
+      } else if (key === "managerName") {
+        mappedItem[headersMapping[key]] = item?.managerName
+          ? `${item?.managerName}`
+          : "N/A";
+      } else if (key === "isCheckout") {
+        mappedItem[headersMapping[key]] = item?.isCheckout
+          ? `${"Đã CHECKOUT"}`
+          : "Chưa CHECKOUT";
+      } else if (key === "checkoutAt") {
+        mappedItem[headersMapping[key]] = item?.checkoutAt != null
+          ? `${moment(item?.checkoutAt)
+              .toDate()
+              .toLocaleDateString()} ${moment(item?.checkoutAt)
+              .toDate()
+              .toLocaleTimeString()}`
           : "N/A";
       } else {
         mappedItem[headersMapping[key]] = item[key as keyof DataItem] as string;

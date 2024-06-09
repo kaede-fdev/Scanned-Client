@@ -1,29 +1,47 @@
-"use client"
-import { Grid, Table, TableProps } from "antd";
+"use client";
+import {
+  Button,
+  Checkbox,
+  Flex,
+  Grid,
+  Popover,
+  Space,
+  Table,
+  TableProps,
+} from "antd";
 import moment from "moment";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Typography from "@/components/core/common/Typography";
 import { ScanInfor } from "@/helpers/types";
-import { useAllCheckinQuery } from "@/store/services/scan";
+import {
+  useAllCheckinQuery,
+  useEditCheckinMutation,
+} from "@/store/services/scan";
 import PopoverModule from "@/components/core/module/ScanAll/PopoverModules";
+import { FaFilter } from "react-icons/fa";
+import { Key } from "antd/es/table/interface";
+import { themes } from "@/styles/themes";
 
 type TProps = {
-    isRefresh: boolean;
-}
+  isRefresh: boolean;
+};
 
-function TableCheckin({isRefresh}: TProps) {
+function TableCheckin({ isRefresh }: TProps) {
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || "";
+  const [isShowDropDown, setIsShowDropDown] = useState<boolean>(false);
 
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
+  const [isCheckout, setIsCheckout] = useState<boolean | undefined>(undefined);
 
   const { scannedCheckinData, isFetching, refetch } = useAllCheckinQuery(
     {
-      limit: 10,
+      limit: undefined,
       search: search,
+      isCheckout: isCheckout
     },
     {
       selectFromResult: ({ data, isFetching }) => {
@@ -37,8 +55,33 @@ function TableCheckin({isRefresh}: TProps) {
 
   useEffect(() => {
     refetch();
-  }, [isRefresh])
+  }, [isRefresh]);
 
+  const HandleField = (value: any, record: any, type: string) => {
+    const newEdit = {
+      ...record,
+      [type]: value,
+      ...(type === "isCheckout" && { checkoutAt: new Date() }),
+    };
+    console.log(newEdit);
+    handleEditById(newEdit);
+  };
+  const [editCheckin] = useEditCheckinMutation();
+  const handleEditById = async (data: any) => {
+    try {
+      const res = await editCheckin(data);
+    } catch (error) {}
+  };
+
+  const handleFilterChange = (checkoutFilter: boolean[] | undefined) => {
+    if (!checkoutFilter || checkoutFilter.length === 0) {
+      setIsCheckout(undefined);
+    } else if (checkoutFilter.length === 2) {
+      setIsCheckout(undefined);
+    } else {
+      setIsCheckout(checkoutFilter[0]);
+    }
+  };
 
   const columns: TableProps<ScanInfor>["columns"] = [
     {
@@ -123,30 +166,93 @@ function TableCheckin({isRefresh}: TProps) {
       },
     },
     {
-        title: "Người quét",
-        dataIndex: "",
-        key: "scannedBy",
-        width: 120,
-        render: (value, record) => {
-          return <PopoverModule record={record} />;
-        },
-        sorter: (one, two) => one.issuedAt.localeCompare(two.issuedAt),
+      title: "Phòng ban",
+      dataIndex: "",
+      key: "banId",
+      width: 120,
+      render: (value, record) => {
+        return <Typography.Text>{record?.banId?.ban}</Typography.Text>;
       },
-      {
-        title: "Thời gian quét",
-        dataIndex: "",
-        key: "createAt",
-        width: 120,
-        render: (value, record) => {
-          return (
-            <Typography.Text>
-              {moment(record?.createdAt).toDate().toLocaleDateString()}{" "}
-              {moment(record?.createdAt).toDate().toLocaleTimeString()}
-            </Typography.Text>
-          );
-        },
-        sorter: (one, two) => one.createdAt.localeCompare(two.createdAt),
+    },
+    {
+      title: "Cán bộ",
+      dataIndex: "",
+      key: "managerName",
+      width: 120,
+      render: (value, record) => {
+        return <Typography.Text>{record?.managerName}</Typography.Text>;
       },
+    },
+    {
+      title: "Người quét",
+      dataIndex: "",
+      key: "scannedBy",
+      width: 120,
+      render: (value, record) => {
+        return <PopoverModule record={record} />;
+      },
+      sorter: (one, two) => one.issuedAt.localeCompare(two.issuedAt),
+    },
+    {
+      title: "Thời gian quét",
+      dataIndex: "",
+      key: "createAt",
+      width: 120,
+      render: (value, record) => {
+        return (
+          <Typography.Text>
+            {moment(record?.createdAt).toDate().toLocaleDateString()}{" "}
+            {moment(record?.createdAt).toDate().toLocaleTimeString()}
+          </Typography.Text>
+        );
+      },
+      sorter: (one, two) => one.createdAt.localeCompare(two.createdAt),
+    },
+    {
+      title: `${isCheckout ? "(Lọc)" : ""} CHECK OUT`,
+      dataIndex: "",
+      key: "isCheckout",
+      width: 140,
+      fixed: "right",
+      filters: [
+        {
+          text: "Chưa CHECKOUT",
+          value: false
+        },
+        {
+          text: "Đã CHECK OUT",
+          value: true
+        }
+      ],
+      onFilter: (value: boolean | Key, record: ScanInfor) => record.isCheckout === value,
+      filterIcon: (filtered) => (
+        <span>
+            <FaFilter color="white" size={12} />
+        </span>
+      ),
+      render: (value, record) => {
+        return (
+          <Space.Compact style={{ width: "100%" }}>
+            {record?.isCheckout ? (
+              <Typography.Text $fontWeight={700}>Đã CHECKOUT</Typography.Text>
+            ) : (
+              <Button
+                type="primary"
+                style={{
+                  background: themes?.default?.colors?.successDark
+                }}
+                onClick={() => {
+                  HandleField(true, record, "isCheckout");
+                  refetch();
+                }}
+              >
+                CHECK OUT
+              </Button>
+            )}
+          </Space.Compact>
+        );
+      },
+    },
   ];
 
   return (
@@ -161,6 +267,10 @@ function TableCheckin({isRefresh}: TProps) {
       pagination={false}
       sticky
       showSorterTooltip={{ target: "sorter-icon" }}
+      onChange={(pagination, filters) => {
+        const checkoutFilter = filters.isCheckout as boolean[];
+        handleFilterChange(checkoutFilter);
+      }}
     />
   );
 }

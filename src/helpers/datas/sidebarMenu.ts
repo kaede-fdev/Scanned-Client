@@ -36,10 +36,10 @@ export const sidebarMenu: MenuProps["items"] = [
         key: "user-management",
         label: "Quản lý người dùng",
       },
-      {
-        key: "bans-management",
-        label: "Quản lý phòng ban",
-      },
+      // {
+      //   key: "bans-management",
+      //   label: "Quản lý phòng ban",
+      // },
     ],
   },
 ];

@@ -59,7 +59,7 @@ function ChangeInforModules() {
                   onChange={handleSearch}
                 />
               </Form.Item>
-              <Flex gap={20}>
+              {/* <Flex gap={20}>
                 <Button
                   onClick={() => {
                     setIsCheckOut(false);
@@ -78,7 +78,7 @@ function ChangeInforModules() {
                 >
                   CHECK OUT
                 </Button>
-              </Flex>
+              </Flex> */}
             </Flex>
           </Flex>
         </Form>
@@ -87,7 +87,7 @@ function ChangeInforModules() {
         <Row gutter={16}>
           <Col span={24}>
             <Typography.Text $fontWeight={600} id="checkin">
-              Dữ liệu{" "}
+              Dữ liệu đã{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
                 CHECK IN
               </span>{" "}
@@ -98,7 +98,7 @@ function ChangeInforModules() {
               setIsRefresh={setIsRefresh}
             />
           </Col>
-          <Col span={24}>
+          {/* <Col span={24}>
             <Typography.Text $fontWeight={600} id="checkout">
               Dữ liệu{" "}
               <span style={{ color: themes.default.colors.primaryColor }}>
@@ -110,7 +110,7 @@ function ChangeInforModules() {
               search={search}
               setIsRefresh={setIsRefresh}
             />
-          </Col>
+          </Col> */}
         </Row>
       </S.Container>
     </S.MainContainerWrapper>

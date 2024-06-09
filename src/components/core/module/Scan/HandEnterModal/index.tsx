@@ -38,7 +38,7 @@ type FieldType = {
   cccd: string;
   cmnd: string;
   banId: string;
-  managerId: string;
+  managerName: string;
 };
 
 function HandEnterModal({
@@ -72,6 +72,7 @@ function HandEnterModal({
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
+      console.log(values);
       if (isCheckOut) {
         const res = await scanCheckoutFromHand(values).unwrap();
         setIsRefresh(!isRefresh);
@@ -137,13 +138,10 @@ function HandEnterModal({
                   </Select>
                 </Form.Item>
                 <Form.Item label="Ngày sinh  (yyyy-mm-dd)" name="dob">
-                  <Space.Compact style={{ width: "100%" }}>
-                    <DatePicker
-                      placeholder="Nhập ngày sinh"
-                      size="large"
-                      style={{ width: "100%" }}
-                    />
-                  </Space.Compact>
+                  <DatePicker
+                    placeholder="Nhập ngày sinh"
+                    style={{ width: "100%" }}
+                  />
                 </Form.Item>
                 <Form.Item label="Địa chỉ" name={"fullAddress"}>
                   <Input placeholder="Nhập địa chỉ" />
@@ -157,13 +155,10 @@ function HandEnterModal({
                   <Input placeholder="Nhập số CMND" />
                 </Form.Item>
                 <Form.Item label="Ngày cấp  (yyyy-mm-dd)" name={"issuedAt"}>
-                  <Space.Compact style={{ width: "100%" }}>
-                    <DatePicker
-                      placeholder="Nhập ngày cấp"
-                      size="large"
-                      style={{ width: "100%" }}
-                    />
-                  </Space.Compact>
+                  <DatePicker
+                    placeholder="Nhập ngày cấp"
+                    style={{ width: "100%" }}
+                  />
                 </Form.Item>
                 <Form.Item
                   label="Phòng ban"
@@ -191,7 +186,7 @@ function HandEnterModal({
                 </Form.Item>
                 <Form.Item
                   label="Cán bộ phụ trách"
-                  name="managerId"
+                  name="managerName"
                   rules={[
                     {
                       required: true,
@@ -199,7 +194,7 @@ function HandEnterModal({
                     },
                   ]}
                 >
-                  <Select
+                  {/* <Select
                     placeholder="Chọn cán bộ"
                     disabled={banId.length == 0 ? true : false}
                   >
@@ -208,7 +203,8 @@ function HandEnterModal({
                         {item?.fullname}
                       </Select.Option>
                     ))}
-                  </Select>
+                  </Select> */}
+                  <Input placeholder="Nhập tên cán bộ phụ trách" />
                 </Form.Item>
               </Col>
               <Flex align="center" justify="end" style={{ width: "100%" }}>
