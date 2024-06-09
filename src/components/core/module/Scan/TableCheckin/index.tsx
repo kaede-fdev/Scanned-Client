@@ -39,7 +39,7 @@ function TableCheckin({ isRefresh }: TProps) {
 
   const { scannedCheckinData, isFetching, refetch } = useAllCheckinQuery(
     {
-      limit: undefined,
+      limit: 200,
       search: search,
       isCheckout: isCheckout
     },
@@ -100,7 +100,7 @@ function TableCheckin({ isRefresh }: TProps) {
       width: 160,
       fixed: "left",
       render: (value, record) => {
-        return <Typography.Text>{record?.fullname}</Typography.Text>;
+        return <Typography.Text $fontWeight={500} $color={themes?.default?.colors?.primary}>{record?.fullname}</Typography.Text>;
       },
     },
     {
@@ -109,7 +109,7 @@ function TableCheckin({ isRefresh }: TProps) {
       key: "cccd",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text>{record?.cccd}</Typography.Text>;
+        return <Typography.Text  $fontWeight={500}>{record?.cccd}</Typography.Text>;
       },
     },
     {
@@ -118,7 +118,7 @@ function TableCheckin({ isRefresh }: TProps) {
       key: "cmnd",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text>{record?.cmnd}</Typography.Text>;
+        return <Typography.Text  $fontWeight={500}>{record?.cmnd}</Typography.Text>;
       },
     },
     {
@@ -234,7 +234,7 @@ function TableCheckin({ isRefresh }: TProps) {
         return (
           <Space.Compact style={{ width: "100%" }}>
             {record?.isCheckout ? (
-              <Typography.Text $fontWeight={700}>Đã CHECKOUT</Typography.Text>
+              <Typography.Text $fontWeight={700} $color={themes?.default?.colors?.primary}>Đã CHECKOUT</Typography.Text>
             ) : (
               <Button
                 type="primary"
