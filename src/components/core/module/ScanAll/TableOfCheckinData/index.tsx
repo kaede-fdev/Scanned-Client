@@ -170,6 +170,27 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
         one.managerId?.fullname.localeCompare(two.managerId?.fullname),
     },
     {
+      title: "Thời gian CHECKOUT",
+      dataIndex: "",
+      key: "checkoutAt",
+      width: 100,
+      render: (value, record) => {
+        return (
+          <Typography.Text>
+            {record?.checkoutAt != null ? `
+              ${
+                moment(record?.checkoutAt).toDate().toLocaleDateString()
+              }  ${
+                moment(record?.checkoutAt).toDate().toLocaleTimeString()
+              }
+            ` : "N/A"}
+          </Typography.Text>
+        );
+      },
+      sorter: (one, two) =>
+        one.managerId?.fullname.localeCompare(two.managerId?.fullname),
+    },
+    {
       title: "Người quét",
       dataIndex: "",
       key: "scannedBy",
