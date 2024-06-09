@@ -216,11 +216,11 @@ function TableCheckin({ isRefresh }: TProps) {
       fixed: "right",
       filters: [
         {
-          text: "Chưa CHECKOUT",
+          text: "CHƯA CHECKOUT",
           value: false
         },
         {
-          text: "Đã CHECK OUT",
+          text: "ĐÃ CHECK OUT",
           value: true
         }
       ],
@@ -234,7 +234,7 @@ function TableCheckin({ isRefresh }: TProps) {
         return (
           <Space.Compact style={{ width: "100%" }}>
             {record?.isCheckout ? (
-              <Typography.Text $fontWeight={700} $color={themes?.default?.colors?.primary}>Đã CHECKOUT</Typography.Text>
+              <Typography.Text $fontWeight={700} $color={themes?.default?.colors?.primary}>ĐÃ CHECKOUT</Typography.Text>
             ) : (
               <Button
                 type="primary"
