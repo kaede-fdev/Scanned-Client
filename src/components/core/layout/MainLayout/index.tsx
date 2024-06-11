@@ -188,7 +188,14 @@ export default function MainLayout({
           </Popover>
           <Button type="text">
             {screens.xs ? (
-              <IoIosLogOut color={themes.default.colors.text5} size={24} />
+              <IoIosLogOut
+                onClick={() => {
+                  webStorageClient.removeAll();
+                  router.push("/sign-in");
+                }}
+                color={themes.default.colors.text5}
+                size={24}
+              />
             ) : (
               <Typography.Text
                 $color="white"
@@ -256,7 +263,10 @@ export default function MainLayout({
             {children}
           </Content>
           <S.FooterCustom>
-            <p>&copy; 2024 Công an quận Hai Bà Trưng - Hà Nội. All rights reserved.</p>
+            <p>
+              &copy; 2024 Công an quận Hai Bà Trưng - Hà Nội. All rights
+              reserved.
+            </p>
           </S.FooterCustom>
         </Layout>
       </Layout>

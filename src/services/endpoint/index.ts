@@ -11,7 +11,8 @@ const userEnpoint = {
     CREATE_NEW: `${prefixBase}/user/create`,
     FIND_BY_ID: `${prefixBase}/user/{:id}`,
     DELETE_BY_ID: `${prefixBase}/user/{:id}`,
-    EDIT_USER: `${prefixBase}/user/edit`
+    EDIT_USER: `${prefixBase}/user/edit`,
+    CHANGE_PASSWORD: `${prefixBase}/user/change-password`,
 }
 
 const scanEndpoint = {

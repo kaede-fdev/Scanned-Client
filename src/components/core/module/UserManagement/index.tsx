@@ -8,9 +8,11 @@ import {
   Button,
   Flex,
   Form,
+  FormProps,
   Grid,
   Input,
   message,
+  Modal,
   Select,
   Space,
   Switch,
@@ -24,6 +26,7 @@ import _ from "lodash";
 import { createQueryString } from "@/utils/queryString";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import {
+  useChangePasswordMutation,
   useDeleteByIdMutation,
   useEditUserMutation,
   useGetAllUserQuery,
@@ -31,6 +34,7 @@ import {
 import { useRouter } from "next-nprogress-bar";
 import { UserInfor } from "@/helpers/types";
 import { FaCheck } from "react-icons/fa";
+import useModal from "@/hooks/useModal";
 
 function UserManagementModule() {
   const { useBreakpoint } = Grid;
@@ -46,6 +50,8 @@ function UserManagementModule() {
   const handleSearch = _.debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     router.push(createQueryString("search", `${e?.target?.value}`));
   }, 300);
+
+  const [record, setRecord] = useState<UserInfor | null>(null);
 
   const { users, isFetching, refetch } = useGetAllUserQuery(
     {
@@ -88,6 +94,12 @@ function UserManagementModule() {
     } catch (error) {
       message.error("Xảy ra lỗi trong quá trình xóa tài khoản");
     }
+  };
+
+  const { openModal, visible, closeModal, modalState } = useModal();
+  const handleChangePassword = (record: UserInfor) => {
+    setRecord(record);
+    openModal();
   };
 
   const columns: TableProps<UserInfor>["columns"] = [
@@ -145,7 +157,16 @@ function UserManagementModule() {
       key: "email",
       width: 140,
       render: (value, record) => {
-        return <Typography.Text>{record?.email}</Typography.Text>;
+        return (
+          <Space.Compact style={{ width: "100%" }}>
+            <Input
+              defaultValue={value.email}
+              onChange={(event) => {
+                HandleField(event.target.value, record, "email");
+              }}
+            />
+          </Space.Compact>
+        );
       },
       sorter: (one, two) => one.email.localeCompare(two.email),
     },
@@ -231,6 +252,21 @@ function UserManagementModule() {
       title: "",
       dataIndex: "",
       key: "",
+      width: 100,
+      render: (value, record) => {
+        return (
+          <Flex align="center" gap={10} style={{ width: "100%" }}>
+            <Button type="primary" onClick={() => handleChangePassword(record)}>
+              Đổi mật khẩu
+            </Button>
+          </Flex>
+        );
+      },
+    },
+    {
+      title: "",
+      dataIndex: "",
+      key: "",
       width: 50,
       render: (value, record) => {
         return (
@@ -252,6 +288,22 @@ function UserManagementModule() {
       },
     },
   ];
+  const [changePassword] = useChangePasswordMutation();
+
+  const onFishChangePassword: FormProps<{
+    newPassword: string;
+  }>["onFinish"] = async (values) => {
+    try {
+      console.log(values);
+      const dataUpdate = {
+        newPassword: values.newPassword,
+        forUserId: record?._id,
+      }
+      await changePassword(dataUpdate);
+    } catch (error) {
+      message.error("Thây đổi mật khẩu xảy ra lỗi")
+    }
+  };
 
   return (
     <S.MainContainerWrapper>
@@ -318,6 +370,42 @@ function UserManagementModule() {
           </Form.Item>
         </Form>
       </S.Container>
+
+      <Modal
+        open={visible}
+        onCancel={closeModal}
+        footer={null}
+        title={`Đổi mật khẩu ${record?.firstname} ${record?.lastname}`}
+        centered
+      >
+        <Flex>
+          <Form layout="vertical" onFinish={onFishChangePassword}>
+            <Form.Item
+              label="Mật khẩu mới"
+              name={"newPassword"}
+              rules={[
+                {
+                  required: true,
+                  message: "Mật khẩu không được để trống",
+                },
+              ]}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Flex>
+              <Form.Item
+                style={{
+                  marginBottom: "0px",
+                }}
+              >
+                <Button type="primary" htmlType="submit">
+                  Xác nhận đổi
+                </Button>
+              </Form.Item>
+            </Flex>
+          </Form>
+        </Flex>
+      </Modal>
     </S.MainContainerWrapper>
   );
 }

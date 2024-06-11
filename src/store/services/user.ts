@@ -34,14 +34,28 @@ export const authAPI = api.injectEndpoints({
         flashError: true,
       }),
     }),
+    changePassword: build.mutation({
+      query: (data) => ({
+        url: userEnpoint.CHANGE_PASSWORD,
+        body: data,
+        method: "PATCH",
+        flashError: true,
+      }),
+    }),
     deleteById: build.mutation({
       query: (params: string) => ({
         url: userEnpoint.DELETE_BY_ID.replace("{:id}", params),
         method: "DELETE",
-        flashError: true
-      })
-    })
+        flashError: true,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllUserQuery, useCreateUserMutation, useEditUserMutation, useDeleteByIdMutation } = authAPI;
+export const {
+  useGetAllUserQuery,
+  useCreateUserMutation,
+  useEditUserMutation,
+  useDeleteByIdMutation,
+  useChangePasswordMutation
+} = authAPI;

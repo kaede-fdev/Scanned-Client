@@ -33,6 +33,8 @@ type FieldType = {
   fistname: string;
   lastname: string;
   position: string;
+  phone: string;
+  password: string;
   isAdmin: false;
 };
 
@@ -60,6 +62,7 @@ function CreateUserModule() {
   useEffect(() => { refetch() }, [])
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    console.log(values);
     try {
       const users = [values];
       const res = await createUser({
@@ -198,12 +201,24 @@ function CreateUserModule() {
                     <Input placeholder="Ví dụ: email@gmail.com" />
                   </Form.Item>
                   <Form.Item
-                    label="Số điện thoại (mật khẩu mặc định)"
+                    label="Số điện thoại"
                     name="phone"
                     rules={[
                       {
                         required: true,
                         message: "Số điện thoại không được để trống",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Nhập số điên thoại" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Mật khẩu"
+                    name="password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Mật khẩu không được để trống",
                       },
                     ]}
                   >

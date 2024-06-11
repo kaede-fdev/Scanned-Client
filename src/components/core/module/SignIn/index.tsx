@@ -142,12 +142,12 @@ function SignInModule() {
                 </Flex>
               </Form.Item>
             </Form>
-            <Flex align="flex-start" justify="space-between">
+            {/* <Flex align="flex-start" justify="space-between">
               <Link href={"#"}>Quên mật khẩu?</Link>
               <Typography.Text>
                 Chưa có tài khoản? <Link href={"/sign-up"}>Đăng ký</Link>
               </Typography.Text>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Flex>
       </Card>

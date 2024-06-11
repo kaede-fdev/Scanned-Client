@@ -86,7 +86,7 @@ function HandEnterModal({
       modalState(false);
       message.success("Thêm thành công");
     } catch (error) {
-      message.error("Xẩy ra lỗi trong quá trình tạo thông tin");
+      message.error("Xảy ra lỗi trong quá trình tạo thông tin");
     }
   };
 
