@@ -1,14 +1,12 @@
 import ScanModule from "@/components/core/module/Scan";
 import { Metadata } from "next";
-import React from "react";
 
 export const metadata: Metadata = {
-  title: "Thêm mới",
+  title: "CHECKIN | Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
+  description: "Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
 };
-
-
 function Scan() {
   return <ScanModule />;
-}
+} 
 
 export default Scan;

@@ -1,3 +1,4 @@
+import { Layout } from "antd";
 import { Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import styled from "styled-components";
@@ -57,5 +58,15 @@ export const OverLay = styled.div`
     100% {
       opacity: 0.3;
     }
+  }
+`;
+export const FooterCustom = styled(Layout.Footer)`
+  background: #fff !important;
+  margin-top: 10px !important;
+  padding: 5px 20px !important;
+  border-radius: 10px !important;
+
+  p{
+    font-size: 12px;
   }
 `;

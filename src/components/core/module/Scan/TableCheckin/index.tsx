@@ -129,7 +129,7 @@ function TableCheckin({ isRefresh }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.dob).toDate().toLocaleDateString()}
+            {moment(record?.dob).format("DD/MM/YYYY")}
           </Typography.Text>
         );
       },
@@ -156,11 +156,11 @@ function TableCheckin({ isRefresh }: TProps) {
       title: "Ngày cấp",
       dataIndex: "",
       key: "issuedAt",
-      width: 80,
+      width: 100,
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.issuedAt).toDate().toLocaleDateString()}
+            {moment(record?.issuedAt).format("DD/MM/YYYY")}
           </Typography.Text>
         );
       },
@@ -169,7 +169,7 @@ function TableCheckin({ isRefresh }: TProps) {
       title: "Phòng ban",
       dataIndex: "",
       key: "banId",
-      width: 120,
+      width: 140,
       render: (value, record) => {
         return <Typography.Text>{record?.banId?.ban}</Typography.Text>;
       },
@@ -178,9 +178,18 @@ function TableCheckin({ isRefresh }: TProps) {
       title: "Cán bộ",
       dataIndex: "",
       key: "managerName",
-      width: 120,
+      width: 140,
       render: (value, record) => {
         return <Typography.Text>{record?.managerName}</Typography.Text>;
+      },
+    },
+    {
+      title: "Mục đích làm việc",
+      dataIndex: "",
+      key: "purpose",
+      width: 160,
+      render: (value, record) => {
+        return <Typography.Text>{record?.purpose}</Typography.Text>;
       },
     },
     {
@@ -197,11 +206,11 @@ function TableCheckin({ isRefresh }: TProps) {
       title: "Thời gian quét",
       dataIndex: "",
       key: "createAt",
-      width: 120,
+      width: 160,
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.createdAt).toDate().toLocaleDateString()}{" "}
+            {moment(record?.createdAt).format("DD/MM/YYYY")}{" "}
             {moment(record?.createdAt).toDate().toLocaleTimeString()}
           </Typography.Text>
         );

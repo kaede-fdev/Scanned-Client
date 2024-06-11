@@ -4,6 +4,7 @@ import { useAllBanQuery } from "@/store/services/ban";
 import { useAllBanManagerByBanIdQuery } from "@/store/services/manager";
 import { useScanCheckinMutation } from "@/store/services/scan";
 import { Button, Card, Flex, Form, FormProps, Input, message, Modal, Select } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import React, { useState } from "react";
 
 type TProps = {
@@ -17,6 +18,7 @@ type TProps = {
 type FieldType = {
     banId: string;
     managerName: string;
+    purpose: string;
   };
 
 function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIsRefresh }: TProps) {
@@ -48,8 +50,10 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
         const saveData = {
             data: inputData!,
             banId: values.banId,
-            managerName: values.managerName
+            managerName: values.managerName,
+            purpose:  values.purpose
         }
+        console.log(saveData);
         const res = await scanCheckin(saveData).unwrap();
         setOpen(false);
         setInputData("");
@@ -130,6 +134,18 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
               ))}
             </Select> */}
             <Input placeholder="Nhập tên của cán bộ phụ trách"/>
+          </Form.Item>
+          <Form.Item
+            label="Mục đích đến làm việc"
+            name="purpose"
+            rules={[
+              {
+                required: true,
+                message: "Không được để trống",
+              },
+            ]}
+          >
+            <TextArea rows={3} placeholder="Nhập múc đích đến làm việc"/>
           </Form.Item>
           <Flex justify="end">
             <Form.Item style={{ marginBottom: 0 }}>

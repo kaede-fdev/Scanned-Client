@@ -1,11 +1,10 @@
-import React from 'react'
-import CreateUserModule from '@/components/core/module/CreateUser'
+import CreateUserModule from '@/components/core/module/CreateUser';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Tạo người dùng",
+    title: "Tạo người dùng | Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
+    description: "Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
   };
-  
 
 function CreateUser() {
     return (

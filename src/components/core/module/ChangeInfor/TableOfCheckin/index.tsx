@@ -24,6 +24,7 @@ import {
   Table,
   TableProps,
 } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 type TProps = {
@@ -186,6 +187,7 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
         return (
           <Space.Compact style={{ width: "100%" }}>
             <DatePicker
+              format={"DD/MM/YYYY"}
               placeholder="Chọn ngày sinh"
               defaultValue={value?.dob ? dayjs(value?.dob) : ""}
               onChange={(event) => {
@@ -247,6 +249,7 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
         return (
           <Space.Compact style={{ width: "100%" }}>
             <DatePicker
+              format={"DD/MM/YYYY"}
               defaultValue={value?.issuedAt ? dayjs(value?.issuedAt) : ""}
               onChange={(event) => {
                 HandleField(
@@ -254,6 +257,25 @@ function TableOfCheckinForEdit({ isRefresh, search, setIsRefresh }: TProps) {
                   record,
                   "issuedAt"
                 );
+              }}
+            />
+          </Space.Compact>
+        );
+      },
+      sorter: (one, two) => one.issuedAt.localeCompare(two.issuedAt),
+    },
+    {
+      title: "Mục đích làm việc",
+      dataIndex: "",
+      key: "manager",
+      width: 100,
+      render: (value, record) => {
+        return (
+          <Space.Compact style={{ width: "100%" }}>
+            <TextArea rows={1}
+              defaultValue={value?.purpose}
+              onChange={(event) => {
+                HandleField(event.target.value, record, "purpose");
               }}
             />
           </Space.Compact>

@@ -18,6 +18,7 @@ import {
   Select,
   Space,
 } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import React, { useState } from "react";
 
 type TProps = {
@@ -39,6 +40,7 @@ type FieldType = {
   cmnd: string;
   banId: string;
   managerName: string;
+  purpose: string;
 };
 
 function HandEnterModal({
@@ -139,12 +141,25 @@ function HandEnterModal({
                 </Form.Item>
                 <Form.Item label="Ngày sinh  (yyyy-mm-dd)" name="dob">
                   <DatePicker
+                    format={"DD/MM/YYYY"}
                     placeholder="Nhập ngày sinh"
                     style={{ width: "100%" }}
                   />
                 </Form.Item>
                 <Form.Item label="Địa chỉ" name={"fullAddress"}>
                   <Input placeholder="Nhập địa chỉ" />
+                </Form.Item>
+                <Form.Item
+                  label="Mục đích đến làm việc"
+                  name="purpose"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Không được để trống",
+                    },
+                  ]}
+                >
+                  <TextArea rows={1} placeholder="Nhập múc đích đến làm việc" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -156,6 +171,7 @@ function HandEnterModal({
                 </Form.Item>
                 <Form.Item label="Ngày cấp  (yyyy-mm-dd)" name={"issuedAt"}>
                   <DatePicker
+                    format={"DD/MM/YYYY"}
                     placeholder="Nhập ngày cấp"
                     style={{ width: "100%" }}
                   />

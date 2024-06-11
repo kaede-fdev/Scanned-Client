@@ -21,6 +21,9 @@ import { useRouter } from "next-nprogress-bar";
 import { IoScanCircle } from "react-icons/io5";
 import webStorageClient from "@/utils/webStorageClient";
 import { constants } from "@/settings";
+import Image from "next/image";
+
+import AppLogo from "@/public/icons/layout/logo.png"
 
 type FieldType = {
   email: string;
@@ -57,29 +60,36 @@ function SignInModule() {
 
   return (
     <S.Wrapper>
-      <Card bordered style={{ width: 400 }}>
+      <Card style={{ width: 540, border:"none" }}>
         <Flex vertical gap={20}>
+          <Flex align="center" justify="center" vertical>
+            <Image src={AppLogo} width={1200} height={900} style={{
+              objectFit: "contain",
+              width: 150,
+              height: 150
+            }} alt="image"/>
+                <Typography.Title
+            level={3}
+            $fontWeight={800}
+            $color={themes.default.colors.primaryDarker}
+            $align="center"
+          >
+            {
+              " Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng".toUpperCase()
+            }
+          </Typography.Title>
+
+          </Flex>
+
           <Typography.Title
             level={3}
-            $fontWeight={700}
-            $color={themes.default.colors.primaryDarker}
+            $fontWeight={800}
+            $color={themes.default.colors.primaryDark}
             $align="center"
           >
             ĐĂNG NHẬP
           </Typography.Title>
-          <Flex align="center" style={{ cursor: "pointer" }} justify="center">
-            <IoScanCircle
-              style={{ color: themes.default.colors.primaryDarker }}
-              size={38}
-            />
-            <Typography.Title
-              level={3}
-              $fontWeight={700}
-              $color={themes.default.colors.primaryDarker}
-            >
-              Scan
-            </Typography.Title>
-          </Flex>
+
           <Flex vertical>
             <Form
               name="loginForm"
@@ -125,9 +135,11 @@ function SignInModule() {
                 </Flex>
               </Col>
               <Form.Item>
-                <Button loading={isLoading} htmlType="submit" type="primary">
-                  Đăng nhập
-                </Button>
+                <Flex justify="center">
+                  <Button loading={isLoading} htmlType="submit" type="primary">
+                    Đăng nhập
+                  </Button>
+                </Flex>
               </Form.Item>
             </Form>
             <Flex align="flex-start" justify="space-between">

@@ -54,6 +54,7 @@ const headersMapping = {
     dob: "Ngày sinh (MmDdYyyy)",
     fullAddress: "Quê quán",
     issuedAt: "Ngày cấp (MmDdYyyy)",
+    purpose: "Mục đích làm việc",
     banId: "Phòng ban",
     managerName: "Cán bộ quản lý",
     scannedBy: "Người quét",

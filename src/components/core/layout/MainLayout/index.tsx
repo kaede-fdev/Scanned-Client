@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined
-} from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -12,7 +9,7 @@ import {
   Layout,
   Menu,
   message,
-  Popover
+  Popover,
 } from "antd";
 import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
@@ -34,6 +31,7 @@ import { assignUserInfo } from "@/store/features/auth";
 import { useVerifyMutation } from "@/store/services/auth";
 import { themes } from "@/styles/themes";
 import webStorageClient from "@/utils/webStorageClient";
+import AppLogo from "@/public/icons/layout/logo.png";
 
 export default function MainLayout({
   children,
@@ -145,16 +143,26 @@ export default function MainLayout({
           >
             {""}
           </Button>
-          {/* <Flex
-            align="center"
-            style={{ cursor: "pointer" }}
-            onClick={() => setCollapse(!collapse)}
-          >
-            <IoScanCircle style={{ color: "white" }} size={32} />
-            <Typography.Title level={3} $color="white">
-              Scan
-            </Typography.Title>
-          </Flex> */}
+          <Flex align="center" gap={16}>
+            <Image
+              src={AppLogo}
+              alt="image"
+              width={200}
+              height={200}
+              style={{
+                width: 40,
+                height: 40,
+                objectFit: "contain",
+                cursor: "pointer",
+              }}
+              onClick={() => setCollapse(!collapse)}
+            />
+            {screens.md ? (
+              <Typography.Text $color="white" $fontWeight={700}>
+                Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng
+              </Typography.Text>
+            ) : null}
+          </Flex>
         </Flex>
         <Flex align="center">
           <Popover
@@ -182,11 +190,13 @@ export default function MainLayout({
             {screens.xs ? (
               <IoIosLogOut color={themes.default.colors.text5} size={24} />
             ) : (
-              <Typography.Text $color="white" $fontWeight={500}
-                style={{cursor: "pointer"}}
+              <Typography.Text
+                $color="white"
+                $fontWeight={500}
+                style={{ cursor: "pointer" }}
                 onClick={() => {
-                  webStorageClient.removeAll()
-                  router.push('/sign-in')
+                  webStorageClient.removeAll();
+                  router.push("/sign-in");
                 }}
               >
                 Đăng xuất
@@ -203,7 +213,7 @@ export default function MainLayout({
             background: "#fff",
             position: screens.xs ? "absolute" : undefined,
             height: screens.xs ? "calc(100vh - 54px)" : "",
-            zIndex: screens.xs ? "10": undefined
+            zIndex: screens.xs ? "10" : undefined,
           }}
           breakpoint="xl"
           collapsed={collapse}
@@ -227,11 +237,13 @@ export default function MainLayout({
             padding: "10px 10px",
           }}
         >
-          {
-            screens.xs && !collapse ? <S.OverLay onClick={() => {
-              setCollapse(!collapse)
-            }}/> : null
-          }
+          {screens.xs && !collapse ? (
+            <S.OverLay
+              onClick={() => {
+                setCollapse(!collapse);
+              }}
+            />
+          ) : null}
           <Content
             style={{
               padding: 16,
@@ -243,6 +255,9 @@ export default function MainLayout({
           >
             {children}
           </Content>
+          <S.FooterCustom>
+            <p>&copy; 2024 Công an quận Hai Bà Trưng - Hà Nội. All rights reserved.</p>
+          </S.FooterCustom>
         </Layout>
       </Layout>
     </Layout>

@@ -50,7 +50,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       dataIndex: "",
       key: "name",
       fixed: "left",
-      width: 120,
+      width: 170,
       render: (value, record) => {
         return <Typography.Text $color={themes?.default?.colors?.primary}
         $fontWeight={500}>{record?.fullname}</Typography.Text>;
@@ -86,7 +86,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.dob).toDate().toLocaleDateString()}
+            {moment(record?.dob).format("DD/MM/YYYY")}
           </Typography.Text>
         );
       },
@@ -118,7 +118,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.issuedAt).toDate().toLocaleDateString()}
+            {moment(record?.issuedAt).format("DD/MM/YYYY")}
           </Typography.Text>
         );
       },
@@ -128,7 +128,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       title: "Phòng ban",
       dataIndex: "",
       key: "banId",
-      width: 100,
+      width: 140,
       render: (value, record) => {
         return <Typography.Text>{record?.banId?.ban}</Typography.Text>;
       },
@@ -138,9 +138,20 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       title: "Cán bộ quản lý",
       dataIndex: "",
       key: "managerName",
-      width: 100,
+      width: 140,
       render: (value, record) => {
         return <Typography.Text>{record?.managerName}</Typography.Text>;
+      },
+      sorter: (one, two) =>
+        one.managerId?.fullname.localeCompare(two.managerId?.fullname),
+    },
+    {
+      title: "Mục đích làm việc",
+      dataIndex: "",
+      key: "purpose",
+      width: 160,
+      render: (value, record) => {
+        return <Typography.Text>{record?.purpose}</Typography.Text>;
       },
       sorter: (one, two) =>
         one.managerId?.fullname.localeCompare(two.managerId?.fullname),
@@ -173,7 +184,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       title: "Thời gian CHECKOUT",
       dataIndex: "",
       key: "checkoutAt",
-      width: 100,
+      width: 180,
       render: (value, record) => {
         return (
           <Typography.Text>
@@ -194,7 +205,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       title: "Người quét",
       dataIndex: "",
       key: "scannedBy",
-      width: 90,
+      width: 140,
       render: (value, record) => {
         return <PopoverModule record={record} />;
       },
@@ -204,7 +215,7 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       title: "Thời gian quét",
       dataIndex: "",
       key: "createAt",
-      width: 100,
+      width: 180,
       render: (value, record) => {
         return (
           <Typography.Text>

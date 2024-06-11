@@ -27,6 +27,7 @@ export type ScanInfor = {
   managerName: string;
   isCheckout: boolean;
   checkoutAt: string;
+  purpose: string;
   createdAt: string;
   updatedAt: string;
 };
