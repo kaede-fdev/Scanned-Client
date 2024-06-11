@@ -41,7 +41,7 @@ function TableCheckin({ isRefresh }: TProps) {
     {
       limit: 200,
       search: search,
-      isCheckout: isCheckout
+      isCheckout: isCheckout,
     },
     {
       selectFromResult: ({ data, isFetching }) => {
@@ -63,7 +63,6 @@ function TableCheckin({ isRefresh }: TProps) {
       [type]: value,
       ...(type === "isCheckout" && { checkoutAt: new Date() }),
     };
-    console.log(newEdit);
     handleEditById(newEdit);
   };
   const [editCheckin] = useEditCheckinMutation();
@@ -100,7 +99,14 @@ function TableCheckin({ isRefresh }: TProps) {
       width: 160,
       fixed: "left",
       render: (value, record) => {
-        return <Typography.Text $fontWeight={500} $color={themes?.default?.colors?.primary}>{record?.fullname}</Typography.Text>;
+        return (
+          <Typography.Text
+            $fontWeight={500}
+            $color={themes?.default?.colors?.primary}
+          >
+            {record?.fullname}
+          </Typography.Text>
+        );
       },
     },
     {
@@ -109,7 +115,9 @@ function TableCheckin({ isRefresh }: TProps) {
       key: "cccd",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text  $fontWeight={500}>{record?.cccd}</Typography.Text>;
+        return (
+          <Typography.Text $fontWeight={500}>{record?.cccd}</Typography.Text>
+        );
       },
     },
     {
@@ -118,7 +126,9 @@ function TableCheckin({ isRefresh }: TProps) {
       key: "cmnd",
       width: 120,
       render: (value, record) => {
-        return <Typography.Text  $fontWeight={500}>{record?.cmnd}</Typography.Text>;
+        return (
+          <Typography.Text $fontWeight={500}>{record?.cmnd}</Typography.Text>
+        );
       },
     },
     {
@@ -129,7 +139,7 @@ function TableCheckin({ isRefresh }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.dob).format("DD/MM/YYYY")}
+            {record?.dob ? moment(record?.dob).format("DD/MM/YYYY") : "N/A"}
           </Typography.Text>
         );
       },
@@ -160,7 +170,9 @@ function TableCheckin({ isRefresh }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.issuedAt).format("DD/MM/YYYY")}
+            {record?.issuedAt
+              ? moment(record?.issuedAt).format("DD/MM/YYYY")
+              : "N/A"}
           </Typography.Text>
         );
       },
@@ -226,29 +238,35 @@ function TableCheckin({ isRefresh }: TProps) {
       filters: [
         {
           text: "CHƯA CHECKOUT",
-          value: false
+          value: false,
         },
         {
           text: "ĐÃ CHECK OUT",
-          value: true
-        }
+          value: true,
+        },
       ],
-      onFilter: (value: boolean | Key, record: ScanInfor) => record.isCheckout === value,
+      onFilter: (value: boolean | Key, record: ScanInfor) =>
+        record.isCheckout === value,
       filterIcon: (filtered) => (
         <span>
-            <FaFilter color="white" size={12} />
+          <FaFilter color="white" size={12} />
         </span>
       ),
       render: (value, record) => {
         return (
           <Space.Compact style={{ width: "100%" }}>
             {record?.isCheckout ? (
-              <Typography.Text $fontWeight={700} $color={themes?.default?.colors?.primary}>ĐÃ CHECKOUT</Typography.Text>
+              <Typography.Text
+                $fontWeight={700}
+                $color={themes?.default?.colors?.primary}
+              >
+                ĐÃ CHECKOUT
+              </Typography.Text>
             ) : (
               <Button
                 type="primary"
                 style={{
-                  background: themes?.default?.colors?.successDark
+                  background: themes?.default?.colors?.successDark,
                 }}
                 onClick={() => {
                   HandleField(true, record, "isCheckout");

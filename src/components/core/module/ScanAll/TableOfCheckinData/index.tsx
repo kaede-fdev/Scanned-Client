@@ -86,7 +86,9 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.dob).format("DD/MM/YYYY")}
+           {
+              record?.dob ? moment(record?.dob).format("DD/MM/YYYY") :"N/A"
+            }
           </Typography.Text>
         );
       },
@@ -118,7 +120,9 @@ function TableOfCheckinData({ isRefresh, search }: TProps) {
       render: (value, record) => {
         return (
           <Typography.Text>
-            {moment(record?.issuedAt).format("DD/MM/YYYY")}
+            {
+              record?.issuedAt ? moment(record?.issuedAt).format("DD/MM/YYYY") :"N/A"
+            }
           </Typography.Text>
         );
       },

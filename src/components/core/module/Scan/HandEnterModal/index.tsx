@@ -74,7 +74,6 @@ function HandEnterModal({
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
-      console.log(values);
       if (isCheckOut) {
         const res = await scanCheckoutFromHand(values).unwrap();
         setIsRefresh(!isRefresh);

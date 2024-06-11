@@ -46,14 +46,12 @@ function NewScanModal({ open, setOpen, inputData, setInputData, isRefresh, setIs
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
-        console.log(values);
         const saveData = {
             data: inputData!,
             banId: values.banId,
             managerName: values.managerName,
             purpose:  values.purpose
         }
-        console.log(saveData);
         const res = await scanCheckin(saveData).unwrap();
         setOpen(false);
         setInputData("");
