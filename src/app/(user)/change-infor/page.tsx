@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Sửa thông tin | Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
-  description: "Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
+  title: "Sửa thông tin | Phần mềm Quản lý Công Dân làm việc tại Công an quận Hai Bà Trưng",
+  description: "Phần mềm Quản lý Công Dân làm việc tại Công an quận Hai Bà Trưng",
 };
 
 function ChangeInfo() {

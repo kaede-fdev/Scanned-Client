@@ -159,7 +159,7 @@ export default function MainLayout({
             />
             {screens.md ? (
               <Typography.Text $color="white" $fontWeight={700}>
-                Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng
+                Phần mềm Quản lý Công Dân làm việc tại Công an quận Hai Bà Trưng
               </Typography.Text>
             ) : null}
           </Flex>

@@ -75,7 +75,7 @@ function SignInModule() {
             $align="center"
           >
             {
-              " Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng".toUpperCase()
+              " Phần mềm Quản lý Công Dân làm việc tại Công an quận Hai Bà Trưng".toUpperCase()
             }
           </Typography.Title>
 

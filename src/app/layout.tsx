@@ -7,8 +7,8 @@ import './global.styles.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
-  description: "Phần mềm Quản lý khách làm việc tại Công an quận Hai Bà Trưng",
+  title: "Phần mềm Quản lý Công Dân làm việc tại Công an quận Hai Bà Trưng",
+  description: "Phần mềm Quản lý Công Dân làm việc tại Công an quận Hai Bà Trưng",
   icons: "/icons/layout/logo.png"
 };
 
