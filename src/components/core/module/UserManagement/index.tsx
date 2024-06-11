@@ -300,6 +300,8 @@ function UserManagementModule() {
         forUserId: record?._id,
       }
       await changePassword(dataUpdate);
+      message.success("Thay đổi mật khẩu thành công")
+      closeModal();
     } catch (error) {
       message.error("Thây đổi mật khẩu xảy ra lỗi")
     }
